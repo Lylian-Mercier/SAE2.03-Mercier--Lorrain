@@ -1,6 +1,5 @@
 let templateFile = await fetch("./component/Films_catalogue/template.html");
 let template = await templateFile.text();
-console.log("Template chargé :", template); // Vérifiez le contenu du template
 
 let Movie = {};
 
