@@ -50,19 +50,17 @@ function addController(){
 }
 
 function readMovieDetailController() {
-  // Vérifie que l'identifiant du film est fourni
-  if (!isset($_REQUEST['id']) || empty($_REQUEST['id'])) {
-      return false; // Paramètre manquant ou vide
+
+  if (!isset($_REQUEST['id'])) {
+      return false; 
   }
 
-  $id = intval($_REQUEST['id']); // Récupère et sécurise l'identifiant
+  $id = intval($_REQUEST['id']);
+  $movie = getMovieDetail($id);
 
-  // Appel de la fonction getMovieDetail déclarée dans model.php
-  $movieDetail = getMovieDetail($id);
-
-  if ($movieDetail === false) {
-      return false; // Erreur lors de la récupération des détails
+  if ($movie) {
+      return $movie;
+  } else {
+      return false;
   }
-
-  return $movieDetail; // Retourne les détails du film
 }

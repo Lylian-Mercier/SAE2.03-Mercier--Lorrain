@@ -61,9 +61,21 @@ function getMovieDetail($id) {
         ]);
 
         // Requête SQL pour récupérer les détails du film
-        $sql = "SELECT id, name, director, year, length, description, id_category, image, trailer, min_age 
-                FROM Movie 
-                WHERE id = :id";
+        $sql = "SELECT 
+                    Movie.id, 
+                    Movie.name, 
+                    Movie.director, 
+                    Movie.year, 
+                    Movie.length, 
+                    Movie.description, 
+                    Movie.image, 
+                    Movie.trailer, 
+                    Movie.min_age, 
+                    Movie.id_category, 
+                    Category.name AS category
+                FROM Movie
+                JOIN Category ON Movie.id_category = Category.id
+                WHERE Movie.id = :id";
 
         $stmt = $cnx->prepare($sql);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);

@@ -16,6 +16,8 @@
       import { NavBar } from "./component/NavBar/script.js";
       import { Movie } from "./component/Films_catalogue/script.js";
       import { DataMovie } from "./data/dataMovie.js";
+      import { MovieDetail } from "./component/movieDetail/script.js";
+
 
       // Controleur
       // Rappel, écrire window.C plutôt que let C est nécessaire pour tester depuis la console du navigateur
@@ -28,10 +30,21 @@
         );
       };
 
-      C.start = function () {
-        V.renderNavBar("C.handlerAbout()");
-        C.getAllMovies(); // Appelle la fonction pour récupérer les films
+      C.handlerShowMovies = function () {
+        C.getAllMovies(); // Ré-affiche la liste des films
       };
+
+      C.start = function () {
+        V.renderNavBar("C.handlerAbout()", "C.handlerShowMovies()");
+        C.getAllMovies(); // Appelle la fonction pour récupérer les films
+        V.renderMovieDetail(); // Affiche les détails du film
+      };
+
+      C.handlerDetail = async function (movieId) {
+          let movieData = await DataMovie.requestMovieDetails(movieId); // Récupère les détails du film
+          V.renderMovieDetail(movieData); // Affiche les détails du film
+      };
+
 
       // Vue (contient tout ce qui est relatif à l'affichage)
       window.V = {};
@@ -56,14 +69,19 @@
        * Elle sélectionne l'élément HTML avec l'ID "header" et y insère le contenu
        * formaté par le composant NavBar.
        */
-      V.renderNavBar = function (hAbout) {
+      V.renderNavBar = function (hAbout, hShowMovies) {
         let header = document.querySelector("#header");
-        header.innerHTML = NavBar.format(hAbout);
+        header.innerHTML = NavBar.format(hAbout, hShowMovies);
       };
 
       V.renderMovies = function (movies) {
         let content = document.querySelector("#content");
         content.innerHTML = Movie.format(movies); // Utilise Movie.format pour générer le HTML
+      };
+
+      V.renderMovieDetail = function (movieData) {
+        let content = document.querySelector("#content");
+        content.innerHTML = MovieDetail.format(movieData);
       };
 
       C.start(); // Démarre l'application
