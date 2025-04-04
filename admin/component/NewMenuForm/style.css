@@ -1,0 +1,40 @@
+.addMenu {
+    width:30rem;
+}
+
+.addMenu__title {
+    margin-bottom: 0.2rem;
+    color: #fff;
+  
+}
+
+.addMenu__form {
+    display: flex;
+    flex-direction: column;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(255, 255, 255);
+    padding:1.5rem;
+}
+
+.addMenu__form select {
+    font-size: medium;
+    border-style: none;
+    margin-top: .8rem;
+}
+
+.addMenu__form input {
+    margin-top: .8rem;
+    font-size: medium;
+    border-style: none;
+    display: inline-block;
+    height: 2rem;
+    
+}
+
+.addMenu__form input[type=button] {
+    background-color: rgb(113, 91, 69);
+    color:#fff;
+    
+   
+}

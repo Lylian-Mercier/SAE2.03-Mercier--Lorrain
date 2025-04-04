@@ -1,0 +1,22 @@
+<div class="addMenu">
+    <h4 class="addMenu__title"># Ajouter ou modifier un menu</h4>
+    <form class="addMenu__form">
+
+        <input required type="number" name="semaine" placeholder="semaine" min="1" max="52">
+        <select name="jour">
+            <option value="lundi">Lundi</option>
+            <option value="mardi">Mardi</option>
+            <option value="mercredi">Mercredi</option>
+            <option value="jeudi">Jeudi</option>
+            <option value="vendredi">Vendredi</option>
+            <option value="samedi">Samedi</option>
+            <option value="dimanche">Dimanche</option>
+        </select>
+
+        <input required type="text" name="entree" placeholder="Saisir une entrée" pattern="[^0-9]*" title="Numbers are not allowed">
+        <input required type="text" name="plat" placeholder="Saisir un plat" pattern="[^0-9]*" title="Numbers are not allowed">
+        <input required type="text" name="dessert" placeholder="Saisir un dessert" pattern="[^0-9]*" title="Numbers are not allowed">
+        <input onclick="{{handler}}" type="button" value="Update" name="todo">
+
+    </form>
+</div>
