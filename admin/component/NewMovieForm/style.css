@@ -1,14 +1,14 @@
-.addMenu {
+.addMovie {
     width:30rem;
 }
 
-.addMenu__title {
+.addMovie__title {
     margin-bottom: 0.2rem;
     color: #fff;
   
 }
 
-.addMenu__form {
+.addMovie__form {
     display: flex;
     flex-direction: column;
     border-style: solid;
@@ -17,13 +17,13 @@
     padding:1.5rem;
 }
 
-.addMenu__form select {
+.addMovie__form select {
     font-size: medium;
     border-style: none;
     margin-top: .8rem;
 }
 
-.addMenu__form input {
+.addMovie__form input {
     margin-top: .8rem;
     font-size: medium;
     border-style: none;
@@ -32,7 +32,7 @@
     
 }
 
-.addMenu__form input[type=button] {
+.addMovie__form input[type=button] {
     background-color: rgb(113, 91, 69);
     color:#fff;
     
