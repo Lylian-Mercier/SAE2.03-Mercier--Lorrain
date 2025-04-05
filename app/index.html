@@ -52,14 +52,13 @@
 
       C.getAllMovies = async function () {
         try {
-          let data = await DataMovie.requestMovies(); // Récupère les films depuis l'API
+          let data = await DataMovie.requestMoviesCategory(); // Récupère les films depuis l'API
           console.log("Données reçues :", data); // Vérifiez le format des données
-          V.renderMovies(data); // Affiche les films
+          V.renderMovieCategory(data); // Affiche les films
         } catch (error) {
           console.error("Erreur lors de la récupération des films :", error);
         }
       };
-
       // Vue (contient tout ce qui est relatif à l'affichage)
       window.V = {};
 
