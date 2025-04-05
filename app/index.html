@@ -17,6 +17,7 @@
       import { Movie } from "./component/Films_catalogue/script.js";
       import { DataMovie } from "./data/dataMovie.js";
       import { MovieDetail } from "./component/movieDetail/script.js";
+      import { MovieCategory } from "./component/movieCategory/script.js";
 
 
       // Controleur
@@ -76,12 +77,18 @@
 
       V.renderMovies = function (movies) {
         let content = document.querySelector("#content");
-        content.innerHTML = Movie.format(movies); // Utilise Movie.format pour générer le HTML
+        content.innerHTML = Movie.format(movies);
       };
 
       V.renderMovieDetail = function (movieData) {
         let content = document.querySelector("#content");
         content.innerHTML = MovieDetail.format(movieData);
+      };
+
+      V.renderMovieCategory = function (data) {
+        
+        let content = document.querySelector("#content");
+        content.innerHTML = data.map(MovieCategory.format).join("");
       };
 
       C.start(); // Démarre l'application

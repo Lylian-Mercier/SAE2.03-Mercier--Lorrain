@@ -64,3 +64,8 @@ function readMovieDetailController() {
       return false;
   }
 }
+
+function readMoviesByCategoryController() {
+    $categories = getMoviesByCategory();
+    return $categories ? $categories : false;
+}
