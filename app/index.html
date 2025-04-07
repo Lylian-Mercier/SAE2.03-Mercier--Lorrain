@@ -18,6 +18,7 @@
       import { DataMovie } from "./data/dataMovie.js";
       import { MovieDetail } from "./component/movieDetail/script.js";
       import { MovieCategory } from "./component/movieCategory/script.js";
+      import { DataProfile } from "./data/dataProfile.js";
 
 
       // Controleur
@@ -25,18 +26,41 @@
       // Une fois l'application terminée, on pourrait remettre let C.
       window.C = {};
 
+      C.activeProfileId = null;
+
       C.handlerAbout = function () {
         alert(
           "Ceci est une base de projet pour la SAE2.03 édition 2025. Bonne chance !"
         );
       };
 
+      C.handlerProfileSelect = function (selectElement) {
+        const selectedProfileId = event.target.value;
+        C.activeProfileId = selectedProfileId; 
+
+        const avatarElement = document.getElementById("profile-image");
+
+        if (!selectedProfileId) {
+          avatarElement.style.display = "none";
+          return;
+        }
+
+        // Sinon, met à jour l'avatar et l'affiche
+        const selectedOption = event.target.options[event.target.selectedIndex];
+        const avatarFileName = selectedOption.getAttribute("data-img") || "default-avatar.png";
+        const avatarUrl = `https://mmi.unilim.fr/~mercierlorrai1/SAE2.03-Mercier--Lorrain/server/images/${avatarFileName}`
+        avatarElement.src = avatarUrl;
+        avatarElement.style.display = "block";
+        C.getAllMovies(); // Appelle la fonction pour récupérer les films
+      };
+
       C.handlerShowMovies = function () {
         C.getAllMovies(); // Ré-affiche la liste des films
       };
 
-      C.start = function () {
-        V.renderNavBar("C.handlerAbout()", "C.handlerShowMovies()");
+      C.start = async function () {
+        let profiles = await DataProfile.read(); // Récupère les profils
+        await V.renderNavBar("C.handlerAbout()", "C.handlerShowMovies()", profiles);
         C.getAllMovies(); // Appelle la fonction pour récupérer les films
         V.renderMovieDetail(); // Affiche les détails du film
       };
@@ -51,14 +75,11 @@
       window.V = {};
 
       C.getAllMovies = async function () {
-        try {
           let data = await DataMovie.requestMoviesCategory(); // Récupère les films depuis l'API
           console.log("Données reçues :", data); // Vérifiez le format des données
           V.renderMovieCategory(data); // Affiche les films
-        } catch (error) {
-          console.error("Erreur lors de la récupération des films :", error);
-        }
       };
+
       // Vue (contient tout ce qui est relatif à l'affichage)
       window.V = {};
 
@@ -69,9 +90,9 @@
        * Elle sélectionne l'élément HTML avec l'ID "header" et y insère le contenu
        * formaté par le composant NavBar.
        */
-      V.renderNavBar = function (hAbout, hShowMovies) {
+      V.renderNavBar = async function (hAbout, hShowMovies, profiles) {
         let header = document.querySelector("#header");
-        header.innerHTML = NavBar.format(hAbout, hShowMovies);
+        header.innerHTML = await NavBar.format(hAbout, hShowMovies, profiles); // Attendez que NavBar.format retourne le HTML
       };
 
       V.renderMovies = function (movies) {

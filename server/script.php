@@ -57,7 +57,7 @@ if ( isset($_REQUEST['todo']) ){
       $data = readMoviesController();
       break;
 
-      case 'addMovie':
+    case 'addMovie':
         $data = addController();
         break;
 
@@ -71,6 +71,10 @@ if ( isset($_REQUEST['todo']) ){
 
     case 'addProfile':
         $data = addProfileController();
+        break;
+
+    case 'readProfiles':
+        $data = readProfilesController();
         break;
 
     default: // il y a un paramètre todo mais sa valeur n'est pas reconnue/supportée
