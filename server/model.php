@@ -91,7 +91,7 @@ function getMovieDetail($id) {
     }
 }
 
-function getMoviesByCategory() {
+function getMoviesByCategory($age) {
     try {
         $cnx = new PDO("mysql:host=" . HOST . ";dbname=" . DBNAME, DBLOGIN, DBPWD, [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
@@ -105,9 +105,12 @@ function getMoviesByCategory() {
                     Movie.image AS movie_image
                 FROM Movie
                 JOIN Category ON Movie.id_category = Category.id
+                WHERE :age = 0 OR Movie.min_age <= :age
                 ORDER BY Category.name, Movie.name";
 
-        $stmt = $cnx->query($sql);
+        $stmt = $cnx->prepare($sql); // Utilisez prepare() au lieu de query()
+        $stmt->bindParam(':age', $age, PDO::PARAM_INT); // Assurez-vous que :age est correctement lié
+        $stmt->execute(); // Exécutez la requête
         $rows = $stmt->fetchAll(PDO::FETCH_OBJ);
 
         $categories = [];

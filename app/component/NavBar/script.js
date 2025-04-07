@@ -11,7 +11,7 @@ NavBar.format = async function (hAbout, hShowMovies, profiles ) {
   html = html.replace("{{hShowMovies}}", hShowMovies);
 
   let options = profiles
-    .map(profile => `<option value="${profile.id}" data-img="${profile.avatar}">${profile.name}</option>`)
+    .map(profile => `<option value="${profile.id}" data-img="${profile.avatar}"  data-age="${profile.min_age}">${profile.name}</option>`)
     .join("");
 
   let image = profiles[0]?.avatar|| "";  

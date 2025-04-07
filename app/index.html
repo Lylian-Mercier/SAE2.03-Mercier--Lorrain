@@ -20,7 +20,6 @@
       import { MovieCategory } from "./component/movieCategory/script.js";
       import { DataProfile } from "./data/dataProfile.js";
 
-
       // Controleur
       // Rappel, écrire window.C plutôt que let C est nécessaire pour tester depuis la console du navigateur
       // Une fois l'application terminée, on pourrait remettre let C.
@@ -35,23 +34,33 @@
       };
 
       C.handlerProfileSelect = function (selectElement) {
-        const selectedProfileId = event.target.value;
-        C.activeProfileId = selectedProfileId; 
+        const selectedProfileId = selectElement.value; // Récupère l'ID du profil sélectionné
+        C.activeProfileId = selectedProfileId; // Met à jour le profil actif
 
+        // Récupère l'élément de l'avatar
         const avatarElement = document.getElementById("profile-image");
 
+        // Si aucun profil n'est sélectionné, masque l'avatar
         if (!selectedProfileId) {
           avatarElement.style.display = "none";
           return;
         }
 
         // Sinon, met à jour l'avatar et l'affiche
-        const selectedOption = event.target.options[event.target.selectedIndex];
-        const avatarFileName = selectedOption.getAttribute("data-img") || "default-avatar.png";
-        const avatarUrl = `https://mmi.unilim.fr/~mercierlorrai1/SAE2.03-Mercier--Lorrain/server/images/${avatarFileName}`
+        const selectedOption =
+          selectElement.options[selectElement.selectedIndex];
+        const avatarFileName =
+          selectedOption.dataset.img || "default-avatar.jpg";
+        const avatarUrl = `https://mmi.unilim.fr/~mercierlorrai1/SAE2.03-Mercier--Lorrain/server/images/${avatarFileName}`;
         avatarElement.src = avatarUrl;
         avatarElement.style.display = "block";
-        C.getAllMovies(); // Appelle la fonction pour récupérer les films
+
+        // Recharge les films en fonction de l'âge du profil sélectionné
+        const age = parseInt(selectedOption.dataset.age, 10) || 0; // Récupère l'âge ou retourne 0
+        console.log("Avatar sélectionné :", avatarFileName);
+        console.log("Âge sélectionné :", age);
+
+        C.getAllMovies(); // Recharge les films
       };
 
       C.handlerShowMovies = function () {
@@ -60,24 +69,34 @@
 
       C.start = async function () {
         let profiles = await DataProfile.read(); // Récupère les profils
-        await V.renderNavBar("C.handlerAbout()", "C.handlerShowMovies()", profiles);
+        await V.renderNavBar(
+          "C.handlerAbout()",
+          "C.handlerShowMovies()",
+          profiles
+        );
         C.getAllMovies(); // Appelle la fonction pour récupérer les films
         V.renderMovieDetail(); // Affiche les détails du film
       };
 
       C.handlerDetail = async function (movieId) {
-          let movieData = await DataMovie.requestMovieDetails(movieId); // Récupère les détails du film
-          V.renderMovieDetail(movieData); // Affiche les détails du film
+        let movieData = await DataMovie.requestMovieDetails(movieId); // Récupère les détails du film
+        V.renderMovieDetail(movieData); // Affiche les détails du film
       };
 
-
-      // Vue (contient tout ce qui est relatif à l'affichage)
-      window.V = {};
-
       C.getAllMovies = async function () {
-          let data = await DataMovie.requestMoviesCategory(); // Récupère les films depuis l'API
-          console.log("Données reçues :", data); // Vérifiez le format des données
-          V.renderMovieCategory(data); // Affiche les films
+        const age = C.getSelectedProfileAge(); // Récupère l'âge du profil sélectionné
+        let data = await DataMovie.requestMoviesCategory(age); // Récupère les films depuis l'API
+        V.renderMovieCategory(data); // Affiche les films
+      };
+
+      C.getSelectedProfileAge = function () {
+        const profileSelect = document.querySelector(".navbar__profile-select"); // Assurez-vous que l'élément existe
+        if (profileSelect) {
+          const profileOptions =
+            profileSelect.options[profileSelect.selectedIndex];
+          return parseInt(profileOptions.dataset.age, 10) || 0; // Récupère l'âge ou retourne 0
+        }
+        return 0;
       };
 
       // Vue (contient tout ce qui est relatif à l'affichage)
@@ -106,7 +125,6 @@
       };
 
       V.renderMovieCategory = function (data) {
-        
         let content = document.querySelector("#content");
         content.innerHTML = data.map(MovieCategory.format).join("");
       };
