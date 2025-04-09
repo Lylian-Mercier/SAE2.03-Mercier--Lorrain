@@ -57,9 +57,23 @@
         content.innerHTML += NewMovieForm.format(handler);
       };
 
-      V.renderAddProfile = function (handler) {
+      V.renderAddProfile = async function (handler) {
         let content = document.querySelector("#addProfile");
-        content.innerHTML = ProfileForm.format(handler);
+        let profiles = await DataProfile.getProfiles();
+        content.innerHTML = ProfileForm.format(profiles, handler);
+
+        // Vérifiez si les éléments requis existent avant d'appeler init()
+        const select = content.querySelector("#profile-select");
+        const idField = content.querySelector("#profile-id");
+        const nameField = content.querySelector("#profile-name");
+        const avatarField = content.querySelector("#profile-avatar");
+        const ageField = content.querySelector("#profile-min-age");
+
+        if (select && idField && nameField && avatarField && ageField) {
+          ProfileForm.init();
+        } else {
+          console.error("ProfileForm.init() skipped: required elements are missing.");
+        }
       };
 
       C.start();

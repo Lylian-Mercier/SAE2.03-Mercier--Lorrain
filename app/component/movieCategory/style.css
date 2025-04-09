@@ -1,0 +1,69 @@
+/* General styles for movie categories */
+.movie-categories {
+    margin: 1.25rem auto;
+    padding: 1.25rem;
+    max-width: 75rem;
+    background-color: #f9f9f9;
+    border-radius: 0.65rem;
+}
+.movie-categories h2 {
+    font-family: 'Arial', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-align: center;
+    color: #333;
+    background-color: #e0e0e0;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+}
+
+.movies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    justify-content: center;
+}
+
+/* Styles for individual movie cards */
+.movie-card {
+    background-color: #f4f4f4;
+    border: 0.06rem solid #ddd;
+    padding: 1rem;
+    text-align: center;
+    width: 12.5rem;
+    transition: transform 0.3s ease;
+}
+
+.movie-card:hover {
+    transform: translateY(-0.30rem);
+}
+
+.movie-card h3 {
+    font-size: 0.75rem;
+    margin-bottom: 0.65rem;
+    color: #333;
+}
+
+.movie-card p {
+    font-size: 0.60rem;
+    color: #666;
+}
+
+/* Responsive design */
+@media (max-width: 50rem) {
+    .movie-card {
+        width: 9.5rem;
+    }
+}
+
+@media (max-width: 30rem) {
+    .movies {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .movie-card {
+        width: 100%;
+        max-width: 18.75rem;
+    }
+}

@@ -68,16 +68,22 @@ function readMovieDetailController() {
 function readMoviesByCategoryController() {
     $age = isset($_REQUEST['age']) ? intval($_REQUEST['age']) : 0;
     $categories = getMoviesByCategory($age);
-    return $categories ? $categories : false;
+    return $categories ? $categories : [];
 }
 
 function addProfileController(){
-    
+  if (!isset($_REQUEST['name']) || !isset($_REQUEST['min_age'])) {
+    http_response_code(400);
+    echo json_encode(["error" => "Paramètres manquants pour ajouter un profil."]);
+      return false; 
+  }
+  
+  $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
   $name = $_REQUEST['name'];
   $avatar = $_REQUEST['avatar'];
   $min_age = $_REQUEST['min_age'];
 
-  $ok = addProfile($name, $avatar, $min_age);
+  $ok = addProfile($id, $name, $avatar, $min_age);
  
   if ($ok!=0){
       return "$name a été ajouté avec succès";
@@ -90,4 +96,21 @@ function addProfileController(){
 function readProfilesController() {
   $profiles = getProfiles();
   return $profiles ? $profiles : false;
+}
+
+function addFavoriteController() {
+  $profile_id = $_REQUEST['profile_id'];
+  $movie_id = $_REQUEST['movie_id'];
+
+  if (isFavorite($profile_id, $movie_id)) {
+      return "Le film est déjà dans vos favoris.";
+  }
+
+  $ok = addFavorite($profile_id, $movie_id);
+  return $ok ? "Le film a été ajouté à vos favoris." : "Erreur lors de l'ajout aux favoris.";
+}
+
+function getFavoritesController() {
+  $profile_id = $_REQUEST['profile_id'];
+  return getFavorites($profile_id);
 }

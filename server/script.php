@@ -76,12 +76,22 @@ if ( isset($_REQUEST['todo']) ){
     case 'readProfiles':
         $data = readProfilesController();
         break;
+    
+    case 'addFavorite':
+        $data = addFavoriteController();
+        break;
+    
+    case 'getFavorites':
+        $data = getFavoritesController();
+        break;
 
     default: // il y a un paramètre todo mais sa valeur n'est pas reconnue/supportée
       echo json_encode('[error] Unknown todo value');
       http_response_code(400); // 400 == "Bad request"
       exit();
   }
+
+  
 
   /**
    * A ce stade, on a appelé la fonction de contrôleur appropriée et stocké le résultat dans la variable $data.

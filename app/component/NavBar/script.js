@@ -10,9 +10,12 @@ NavBar.format = async function (hAbout, hShowMovies, profiles ) {
   html = html.replace("{{hAbout}}", hAbout);
   html = html.replace("{{hShowMovies}}", hShowMovies);
 
-  let options = profiles
-    .map(profile => `<option value="${profile.id}" data-img="${profile.avatar}"  data-age="${profile.min_age}">${profile.name}</option>`)
-    .join("");
+  let options = `<option value="" data-img="" data-age="0">Choisir un profil</option>`;
+  // let options ="";
+  for (let i = 0; i < profiles.length; i++) {
+    let profile = profiles[i];
+    options += `<option value="${profile.id}" data-img="${profile.avatar}" data-age="${profile.min_age}">${profile.name}</option>`;
+  }
 
   let image = profiles[0]?.avatar|| "";  
   html = html.replace("{{profileOptions}}", options);
