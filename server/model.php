@@ -215,3 +215,24 @@ function getHighlightMovies() {
     error_log("Films mis en avant récupérés : " . json_encode($movies)); // Ajoutez ce log
     return $movies;
 }
+
+function searchMovies($searchTerm, $category = NULL, $year = NULL) {
+    $cnx = new PDO("mysql:host=" . HOST . ";dbname=" . DBNAME, DBLOGIN, DBPWD);
+    $sql = "SELECT id, name, image FROM Movie WHERE name LIKE :searchTerm";
+    if ($category) {
+        $sql .= " AND id_category = :category";
+    }
+    if ($year) {
+        $sql .= " AND year = :year";
+    }
+    $stmt = $cnx->prepare($sql);
+    $stmt ->bindValue(':searchTerm', '%' . $searchTerm . '%', PDO::PARAM_STR);
+    if ($category) {
+        $stmt->bindParam(':category', $category, PDO::PARAM_INT);
+    }
+    if ($year) {
+        $stmt->bindParam(':year', $year, PDO::PARAM_INT);
+    }
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_OBJ);
+}

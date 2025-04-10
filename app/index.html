@@ -147,7 +147,22 @@
         let highlightMovies = await DataMovie.requestHighlightMovies();
         console.log("Films mis en avant reçus :", highlightMovies); // Vérifiez les données reçues
         V.renderHighlightMovies(highlightMovies);
-      };
+      }
+
+      C.searchMovies = async function () {
+        const searchTerm = document.querySelector("#search-input").value.trim(); // Récupère la valeur de l'input de recherche
+        if (searchTerm === "") {
+          alert("Veuillez entrer un terme de recherche.");
+          return;
+        }
+        let movies = await DataMovie.searchMovies(searchTerm); // Récupère les films correspondant au terme de recherche
+        if (movies.length === 0) {
+          document.querySelector("#content").innerHTML =
+            "<p>Aucun film trouvé.</p>"; // Affiche un message si aucun film n'est trouvé
+        } else {
+          V.renderMovies(movies); // Affiche les films trouvés
+        } 
+      }
 
       // Vue (contient tout ce qui est relatif à l'affichage)
       window.V = {};

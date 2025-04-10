@@ -128,3 +128,16 @@ function getHighlightMoviesController(){
   error_log("Films mis en avant récupérés : " . json_encode($highlightMovies)); // Ajoutez ce log
   return $highlightMovies ? $highlightMovies : [];
 }
+
+function searchMoviesController() {
+  $searchTerm = isset($_REQUEST['searchTerm']) ? $_REQUEST['searchTerm'] : '';
+  $category = isset($_REQUEST['category']) ? intval($_REQUEST['category']) : NULL;
+  $year = isset($_REQUEST['year']) ? intval($_REQUEST['year']) : NULL;
+
+  if (empty($searchTerm)) {
+    return [];
+  }
+
+  $movies = searchMovies($searchTerm, $category, $year);
+  return $movies ? $movies : [];
+}

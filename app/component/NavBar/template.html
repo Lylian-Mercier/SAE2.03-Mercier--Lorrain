@@ -3,6 +3,10 @@
     <li class="navbar__item" onclick="{{hAbout}}">About</li>
     <li class="navbar__item" onclick="{{hShowMovies}}">Home</li>
   </ul>
+  <div class="navbar__search-container">
+    <input id="search-input" type="text" class="navbar__search-input" placeholder="Rechercher un film">
+    <button class="navbar__search-button" onclick="C.searchMovies()">Rechercher</button>
+  </div>
   <div class="navbar__profile-container">
     <select class="navbar__profile-select" onchange="C.handlerProfileSelect(this)">
       {{profileOptions}}

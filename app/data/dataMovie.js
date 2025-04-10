@@ -64,6 +64,13 @@ DataMovie.requestHighlightMovies = async function () {
   let highlightMovies = await answer.json();
   console.log("Données reçues pour les films mis en avant :", highlightMovies); // Vérifiez les données reçues
   return highlightMovies;
-};
+}
+
+DataMovie.searchMovies = async function (searchTerm) {
+    const url = `${HOST_URL}/server/script.php?todo=searchMovies&searchTerm=${encodeURIComponent(searchTerm)}`;
+    let answer = await fetch(url);
+    let movies = await answer.json();
+    return movies;
+}
 // On exporte la fonction DataMovie.requestMovies
 export { DataMovie };

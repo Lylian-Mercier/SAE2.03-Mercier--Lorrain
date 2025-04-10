@@ -1,0 +1,53 @@
+/* Style pour le composant highlightMovies */
+.featured-movie {
+    font-family: 'Arial', sans-serif; /* Définit la même police que dans les autres styles */
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.featured-movie h2 {
+    font-family: 'Arial', sans-serif; /* Applique la même police au titre */
+    font-size: 1.5rem; /* Taille augmentée */
+    font-weight: bold;
+    color: #333;
+    background-color: #eee;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    margin-top: 1rem;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.featured-movie h2:hover {
+    transform: scale(1.1); /* Agrandit légèrement le bouton au survol */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1); /* Accentue l'ombre au survol */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Ajoute une transition fluide */
+}
+
+.featured-movie img {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    margin: 0 auto 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.featured-movie p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
+    text-align: center; /* Centrer le synopsis */
+    margin: 20px 0; /* Ajouter un peu d'espace autour du synopsis */
+}

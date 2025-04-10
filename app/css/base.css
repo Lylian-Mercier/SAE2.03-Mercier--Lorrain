@@ -8,3 +8,4 @@
 @import "../component/Films_catalogue/style.css" layer(components);
 @import "../component/movieCategory/style.css" layer(components);
 @import "../component/movieDetail/style.css" layer(components);
+@import "../component/highlightMovies/style.css" layer(components);

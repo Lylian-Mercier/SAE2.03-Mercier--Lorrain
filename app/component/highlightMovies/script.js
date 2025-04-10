@@ -1,6 +1,5 @@
 let templateFile = await fetch("./component/highlightMovies/template.html");
 let template = await templateFile.text();
-console.log("Template chargé :", template);
 
 let HighlightMovies = {};
 
@@ -20,7 +19,6 @@ HighlightMovies.format = function (movies) {
       "{{handler}}",
       `C.handlerDetail(${movie.id})`
     );
-    console.log("HTML généré pour un film :", movieHtml); // Ajoutez ce log
     formattedMovies += movieHtml;
   }
   return formattedMovies;
