@@ -114,3 +114,17 @@ function getFavoritesController() {
   $profile_id = $_REQUEST['profile_id'];
   return getFavorites($profile_id);
 }
+
+function removeFavoritesController(){
+  $profile_id = $_REQUEST['profile_id'];
+  $movie_id = $_REQUEST['movie_id'];
+
+  $ok = removeFavorites($profile_id, $movie_id);
+  return $ok ? "Le film a été supprimé de vos favoris." : "Erreur lors de la suppression des favoris.";
+}
+
+function getHighlightMoviesController(){
+  $highlightMovies = getHighlightMovies();
+  error_log("Films mis en avant récupérés : " . json_encode($highlightMovies)); // Ajoutez ce log
+  return $highlightMovies ? $highlightMovies : [];
+}

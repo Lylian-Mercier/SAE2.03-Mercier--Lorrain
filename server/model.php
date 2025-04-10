@@ -54,7 +54,6 @@ function addMovie($name, $director, $year, $length, $description,$id_category, $
 }
 
 function getMovieDetail($id) {
-    try {
         // Connexion à la base de données
         $cnx = new PDO("mysql:host=" . HOST . ";dbname=" . DBNAME, DBLOGIN, DBPWD, [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
@@ -85,10 +84,6 @@ function getMovieDetail($id) {
         $movieDetail = $stmt->fetch(PDO::FETCH_OBJ);
 
         return $movieDetail; // Retourne les détails du film
-    } catch (Exception $e) {
-        error_log("Erreur SQL : " . $e->getMessage()); // Log dans les erreurs PHP
-        return false;
-    }
 }
 
 function getMoviesByCategory($age) {
@@ -193,4 +188,30 @@ function addFavorite($profile_id, $movie_id) {
     $stmt->bindParam(':movie_id', $movie_id, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchColumn() > 0;
+}
+
+function removeFavorites($profile_id, $movie_id) {
+    $cnx = new PDO("mysql:host=" . HOST . ";dbname=" . DBNAME, DBLOGIN, DBPWD, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);
+    $sql = "DELETE FROM Favorites WHERE profile_id = :profile_id AND movie_id = :movie_id";
+    $stmt = $cnx->prepare($sql);
+    $stmt->bindParam(':profile_id', $profile_id, PDO::PARAM_INT);
+    $stmt->bindParam(':movie_id', $movie_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $rowCount = $stmt->rowCount();
+
+    // Log pour vérifier le résultat
+    error_log("Suppression de favori : profile_id=$profile_id, movie_id=$movie_id, lignes affectées=$rowCount");
+
+    return $rowCount;
+}
+
+function getHighlightMovies() {
+    $cnx = new PDO("mysql:host=" . HOST . ";dbname=" . DBNAME, DBLOGIN, DBPWD);
+    $sql = "SELECT id, name, image, description FROM Movie WHERE is_highlight = TRUE";
+    $stmt = $cnx->query($sql);
+    $movies = $stmt->fetchAll(PDO::FETCH_OBJ);
+    error_log("Films mis en avant récupérés : " . json_encode($movies)); // Ajoutez ce log
+    return $movies;
 }

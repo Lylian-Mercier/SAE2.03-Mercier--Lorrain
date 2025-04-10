@@ -48,7 +48,22 @@ DataMovie.addFavorite = async function (profileId, movieId) {
    let answer = await fetch(url); // Correction : ajout de fetch pour récupérer la réponse
    let response = await answer.json(); // Convertir la réponse en JSON
    return response; // Retourner la réponse
- };
+};
 
+DataMovie.removeFavorites = async function (profileId, movieId) {
+  const url = `${HOST_URL}/server/script.php?todo=removeFavorites&profile_id=${profileId}&movie_id=${movieId}`;
+  console.log("URL générée pour la suppression de favori :", url);
+  let answer = await fetch(url);
+  let response = await answer.json();
+  return response;
+}
+
+DataMovie.requestHighlightMovies = async function () {
+  let answer = await fetch(HOST_URL + "/server/script.php?todo=getHighlightMovies");
+  console.log("URL générée pour les films mis en avant :", HOST_URL + "/server/script.php?todo=getHighlightMovies"); // Corrigez ici
+  let highlightMovies = await answer.json();
+  console.log("Données reçues pour les films mis en avant :", highlightMovies); // Vérifiez les données reçues
+  return highlightMovies;
+};
 // On exporte la fonction DataMovie.requestMovies
 export { DataMovie };

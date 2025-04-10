@@ -9,7 +9,7 @@
 
   <body>
     <header id="header"></header>
-
+    <section id="highlight-movies"></section>
     <section id="content"></section>
 
     <script type="module">
@@ -19,6 +19,7 @@
       import { MovieDetail } from "./component/movieDetail/script.js";
       import { MovieCategory } from "./component/movieCategory/script.js";
       import { DataProfile } from "./data/dataProfile.js";
+      import { HighlightMovies } from "./component/highlightMovies/script.js";
 
       // Controleur
       // Rappel, écrire window.C plutôt que let C est nécessaire pour tester depuis la console du navigateur
@@ -34,18 +35,19 @@
       };
 
       C.handlerShowMovies = function () {
+        document.querySelector("#highlight-movies").style.display = "block"; // Vide le contenu
         C.getAllMovies(); // Ré-affiche la liste des films
       };
 
       C.start = async function () {
-        let profiles = await DataProfile.read(); // Récupère les profils
+        let profiles = await DataProfile.read();
         await V.renderNavBar(
           "C.handlerAbout()",
           "C.handlerShowMovies()",
           profiles
         );
-        C.getAllMovies(); // Appelle la fonction pour récupérer les films
-        V.renderMovieDetail(); // Affiche les détails du film
+        C.getAllMovies();
+        C.getHighlightMovies();
       };
 
       C.handlerDetail = async function (movieId) {
@@ -112,7 +114,7 @@
 
         let response = await DataMovie.addFavorite(profileId, movieId);
         alert(response); // Affiche un message de confirmation
-        C.getMovie(); // Recharge la liste des films
+        C.getAllMovies(); // Recharge la liste des films
       };
 
       C.showFavorites = async function (profileId) {
@@ -125,6 +127,26 @@
 
         let favorites = await DataMovie.getFavorites(profileId);
         V.renderFavorites(favorites);
+      };
+
+      C.removeFavorites = async function (profileId, movieId) {
+        profileId = profileId || C.getSelectedProfileId();
+
+        if (!profileId){
+          alert("Veuillez sélectionner un profil avant de supprimer un favori.");
+          return;
+        }
+
+        let response = await DataMovie.removeFavorites(profileId, movieId);
+        alert(response);
+        C.showFavorites(profileId);
+      }
+
+      C.getHighlightMovies = async function () {
+        console.log("C.getHighlightMovies() est exécuté");
+        let highlightMovies = await DataMovie.requestHighlightMovies();
+        console.log("Films mis en avant reçus :", highlightMovies); // Vérifiez les données reçues
+        V.renderHighlightMovies(highlightMovies);
       };
 
       // Vue (contient tout ce qui est relatif à l'affichage)
@@ -181,11 +203,18 @@
           favoritesHTML += `
          <div class="favorite">
            <img src="https://mmi.unilim.fr/~mercierlorrai1/SAE2.03-Mercier--Lorrain/server/images/${fav.image}" alt="${fav.name}" />
-           <h3>${fav.name}</h3>
+           <h3 onclick="C.handlerDetail(${fav.id})">${fav.name}</h3>
+           <button onclick="C.removeFavorites(C.getSelectedProfileId(), ${fav.id})">Supprimer des favoris</button>
          </div>
            `;
         }
         content.innerHTML = favoritesHTML;
+      };
+
+      V.renderHighlightMovies = function (highlightMovies) {
+        let content = document.querySelector("#highlight-movies");
+        let html = HighlightMovies.format(highlightMovies);
+        content.innerHTML = html;
       };
 
       C.start(); // Démarre l'application

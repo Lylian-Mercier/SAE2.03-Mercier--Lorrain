@@ -1,0 +1,66 @@
+.movie-detail {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.movie-title {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.movie-poster {
+    display: block;
+    width: 50% ;
+    height: auto;
+    margin: 20px auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.movie-synopsis {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 20px 0;
+    text-align: justify;
+}
+
+.movie-detail p {
+    margin: 10px 0;
+    font-size: 1rem;
+}
+
+.movie-detail strong {
+    color: #2c3e50;
+}
+
+.movie-director,
+.movie-year,
+.movie-category,
+.movie-age-restriction {
+    font-weight: bold;
+    color: #34495e;
+}
+
+.movie-trailer-container {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.movie-trailer-container h3 {
+    font-size: 1.5rem;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.movie-trailer {
+    max-width: 100%;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
