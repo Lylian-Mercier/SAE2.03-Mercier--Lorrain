@@ -67,10 +67,10 @@ DataMovie.requestHighlightMovies = async function () {
 }
 
 DataMovie.searchMovies = async function (searchTerm) {
-    const url = `${HOST_URL}/server/script.php?todo=searchMovies&searchTerm=${encodeURIComponent(searchTerm)}`;
-    let answer = await fetch(url);
-    let movies = await answer.json();
-    return movies;
+  const url = `${HOST_URL}/server/script.php?todo=searchMovies&searchTerm=${encodeURIComponent(searchTerm)}`;
+  let answer = await fetch(url);
+  let movies = await answer.json();
+  return movies;
 }
 // On exporte la fonction DataMovie.requestMovies
 export { DataMovie };

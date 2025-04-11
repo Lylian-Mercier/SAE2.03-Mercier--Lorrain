@@ -14,14 +14,17 @@ MovieDetail.format = function (movieData) {
     html = html.replace("{{movieAgeRestriction}}", movieData.min_age);
     html = html.replace("{{movieTrailerUrl}}", movieData.trailer);
 
-    // Insérez le contenu dans la page
-    document.querySelector("#movie-detail-container").innerHTML = html;
+    // Vérifiez si l'élément existe
+    const detailSection = document.querySelector("#movie-detail-section");
+    if (detailSection) {
+        detailSection.innerHTML = html;
 
-    // Défilement automatique vers la section des détails
-    document.querySelector("#movie-detail-section").scrollIntoView({
-        behavior: "smooth", // Défilement fluide
-        block: "start"      // Aligne le haut de l'élément avec le haut de la fenêtre
-    });
+        // Défilement automatique vers la section des détails
+        detailSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
 
     return html;
 };

@@ -141,3 +141,14 @@ function searchMoviesController() {
   $movies = searchMovies($searchTerm, $category, $year);
   return $movies ? $movies : [];
 }
+
+function updateHighlightStatusController() {
+  if (!isset($_REQUEST['movie_id']) || !isset($_REQUEST['is_highlight'])) {
+    return false; 
+  }
+  $movie_id = intval($_REQUEST['movie_id']);
+  $is_highlight = filter_var($_REQUEST['is_highlight'], FILTER_VALIDATE_BOOLEAN);
+  $result = updateHighlightStatus($movie_id, $is_highlight);
+  return $result ? "Le statut de mise en avant a été mis à jour." : "Erreur lors de la mise à jour du statut.";
+}
+      

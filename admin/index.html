@@ -10,6 +10,7 @@
     <section id="log"></section>
     <section id="addMovie"></section>
     <section id="addProfile"></section>
+    <section id="movieSearch"></section>
 
     <script type="module">
       import { Log } from "./component/Log/script.js";
@@ -17,6 +18,7 @@
       import { DataMovie } from "./data/dataMovie.js";
       import { ProfileForm } from "./component/ProfileForm/script.js";
       import { DataProfile } from "./data/dataProfile.js";
+      import { MovieSearch } from "./component/movieSearch/script.js";
 
       window.C = {};
 
@@ -39,10 +41,30 @@
         V.renderLog(res);
       };
 
+      C.handlerSearchMovie = async function () {
+        let searchTerm = document.querySelector("#searchTerm").value;
+        let content = document.querySelector("#movieSearch .movieSearch__results");
+        if (!content) {
+          console.error(".movieSearch__results introuvable");
+          return;
+        }
+
+        let movies = await DataMovie.searchMovies(searchTerm);
+        content.innerHTML = MovieSearch.formatResults(movies, "C.handlerUpdateHighlightStatus");
+
+      };
+
+      C.handlerUpdateHighlightStatus = async function (movieId, isHighlighted) {
+        let res = await DataMovie.updateHighlightStatus(movieId, isHighlighted);
+        V.renderLog(res);
+        C.handlerSearchMovie();
+      };
+
       C.start = function () {
         V.renderLog("Démarrage de l'application");
         V.renderAddMovie("C.handlerAddMovie()");
         V.renderAddProfile("C.handlerAddProfile()");
+        V.renderMovieSearch();
       };
 
       window.V = {};
@@ -74,6 +96,14 @@
         } else {
           console.error("ProfileForm.init() skipped: required elements are missing.");
         }
+      };
+
+      V.renderMovieSearch = function () {
+        let content = document.querySelector("#movieSearch");
+        content.innerHTML = `<input type="text" id="searchTerm" placeholder="Rechercher un film..." />
+        <button onclick="C.handlerSearchMovie()">Rechercher</button>
+        <div class="movieSearch__results"></div>`;
+        MovieSearch.init();
       };
 
       C.start();

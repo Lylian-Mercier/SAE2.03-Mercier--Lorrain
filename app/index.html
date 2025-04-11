@@ -150,6 +150,7 @@
       }
 
       C.searchMovies = async function () {
+        document.querySelector("#highlight-movies").style.display = "none"; // Cache la section des films en avant
         const searchTerm = document.querySelector("#search-input").value.trim(); // Récupère la valeur de l'input de recherche
         if (searchTerm === "") {
           alert("Veuillez entrer un terme de recherche.");

@@ -218,12 +218,12 @@ function getHighlightMovies() {
 
 function searchMovies($searchTerm, $category = NULL, $year = NULL) {
     $cnx = new PDO("mysql:host=" . HOST . ";dbname=" . DBNAME, DBLOGIN, DBPWD);
-    $sql = "SELECT id, name, image FROM Movie WHERE name LIKE :searchTerm";
+    $sql = "SELECT Movie.id, Movie.name, Movie.image, Movie.is_highlight, Category.name AS category FROM Movie LEFT JOIN Category ON Movie.id_category = Category.id WHERE Movie.name LIKE :searchTerm";
     if ($category) {
-        $sql .= " AND id_category = :category";
+        $sql .= " AND Movie.id_category = :category";
     }
     if ($year) {
-        $sql .= " AND year = :year";
+        $sql .= " AND Movie.year = :year";
     }
     $stmt = $cnx->prepare($sql);
     $stmt ->bindValue(':searchTerm', '%' . $searchTerm . '%', PDO::PARAM_STR);
@@ -235,4 +235,14 @@ function searchMovies($searchTerm, $category = NULL, $year = NULL) {
     }
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_OBJ);
+}
+
+function updateHighlightStatus($movie_id, $is_highlight) {
+    $cnx = new PDO("mysql:host=" . HOST . ";dbname=" . DBNAME, DBLOGIN, DBPWD);
+    $sql = "UPDATE Movie SET is_highlight = :is_highlight WHERE id = :movie_id";
+    $stmt = $cnx->prepare($sql);
+    $stmt->bindParam(':is_highlight', $is_highlight, PDO::PARAM_BOOL);
+    $stmt->bindParam(':movie_id', $movie_id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->rowCount();
 }
