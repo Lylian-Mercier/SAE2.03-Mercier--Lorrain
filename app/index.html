@@ -20,6 +20,7 @@
       import { MovieCategory } from "./component/movieCategory/script.js";
       import { DataProfile } from "./data/dataProfile.js";
       import { HighlightMovies } from "./component/highlightMovies/script.js";
+      import { Fav } from "./component/Fav/script.js";
 
       // Controleur
       // Rappel, écrire window.C plutôt que let C est nécessaire pour tester depuis la console du navigateur
@@ -225,22 +226,19 @@
       V.renderFavorites = function (favorites) {
         let content = document.querySelector("#content");
         content.innerHTML = "";
+
         if (favorites.length === 0) {
-          content.innerHTML = "<p>Votre liste de favoris est vide.</p>";
+          content.innerHTML = "<p class='favorite__empty'>Aucun film dans les favoris.</p>";
           return;
         }
-        let favoritesHTML = "";
+
+        let favoriteHtml = "<div class='favorite-list'>";
         for (let i = 0; i < favorites.length; i++) {
           let fav = favorites[i];
-          favoritesHTML += `
-         <div class="favorite">
-           <img src="https://mmi.unilim.fr/~mercierlorrai1/SAE2.03-Mercier--Lorrain/server/images/${fav.image}" alt="${fav.name}" />
-           <h3 onclick="C.handlerDetail(${fav.id})">${fav.name}</h3>
-           <button onclick="C.removeFavorites(C.getSelectedProfileId(), ${fav.id})">Supprimer des favoris</button>
-         </div>
-           `;
+          favoriteHtml += `<div class="favorite-item">${Fav.formatLi(fav)}</div>`;
         }
-        content.innerHTML = favoritesHTML;
+        favoriteHtml += "</div>";
+        content.innerHTML = favoriteHtml;
       };
 
       V.renderHighlightMovies = function (highlightMovies) {
