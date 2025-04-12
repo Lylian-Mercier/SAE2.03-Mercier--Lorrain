@@ -136,6 +136,29 @@ function getMoviesByCategory($age) {
 function addProfile($id, $name, $avatar, $min_age) {
     $cnx = new PDO("mysql:host=" . HOST . ";dbname=" . DBNAME, DBLOGIN, DBPWD);
 
+    $favSql = "SELECT movie_id FROM Favorites WHERE profile_id = :id";
+    $favStmt = $cnx->prepare($favSql);
+    $favStmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $favStmt->execute();
+    $favMovies = $favStmt->fetchAll(PDO::FETCH_COLUMN);
+
+    $ratingSql = "SELECT movie_id, rating FROM Ratings WHERE profile_id = :id";
+    $ratingStmt = $cnx->prepare($ratingSql);
+    $ratingStmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $ratingStmt->execute();
+    $ratings = $ratingStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $delFavSql = "DELETE FROM Favorites WHERE profile_id = :id";
+    $delFavStmt = $cnx->prepare($delFavSql);
+    $delFavStmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $delFavStmt->execute();
+
+    $delRatingSql = "DELETE FROM Ratings WHERE profile_id = :id";
+    $delRatingStmt = $cnx->prepare($delRatingSql);
+    $delRatingStmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $delRatingStmt->execute();
+    
+    
     $sql = "REPLACE INTO Profil (id, name, avatar, min_age) 
             VALUES (:id, :name, :avatar, :min_age)";
     $stmt = $cnx->prepare($sql);
@@ -144,8 +167,32 @@ function addProfile($id, $name, $avatar, $min_age) {
     $stmt->bindParam(':name', $name, PDO::PARAM_STR);
     $stmt->bindParam(':avatar', $avatar, PDO::PARAM_STR);
     $stmt->bindParam(':min_age', $min_age, PDO::PARAM_INT);
-
     $stmt->execute();
+
+    $insertFavSql = "INSERT INTO Favorites (profile_id, movie_id) VALUES (:profile_id, :movie_id)";
+    $insertFavStmt = $cnx->prepare($insertFavSql);
+    $i = 0;
+    $favCount = count($favMovies);
+    while ($i < $favCount) {
+        $insertFavStmt->bindParam(':profile_id', $id, PDO::PARAM_INT);
+        $insertFavStmt->bindParam(':movie_id', $favMovies[$i], PDO::PARAM_INT);
+        $insertFavStmt->execute();
+        $i++;
+    }
+
+    $insertRatingSql = "INSERT INTO Ratings (profile_id, movie_id, rating) VALUES (:profile_id, :movie_id, :rating)";
+    $insertRatingStmt = $cnx->prepare($insertRatingSql);
+    $i = 0;
+    $ratingCount = count($ratings);
+    while ($i < $ratingCount) {
+        $insertRatingStmt->bindParam(':profile_id', $id, PDO::PARAM_INT);
+        $insertRatingStmt->bindParam(':movie_id', $ratings[$i]['movie_id'], PDO::PARAM_INT);
+        $insertRatingStmt->bindParam(':rating', $ratings[$i]['rating'], PDO::PARAM_INT);
+        $insertRatingStmt->execute();
+        $i++;
+    }
+    
+
     $res = $stmt->rowCount();
     return $res; 
 }
@@ -245,4 +292,48 @@ function updateHighlightStatus($movie_id, $is_highlight) {
     $stmt->bindParam(':movie_id', $movie_id, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->rowCount();
+}
+
+function addRating($profile_id, $movie_id, $rating) {
+    try {
+        $cnx = new PDO("mysql:host=" . HOST . ";dbname=" . DBNAME, DBLOGIN, DBPWD);
+        // Correction du nom de la table de "Rating" à "Ratings"
+        $sql = "INSERT INTO Ratings (profile_id, movie_id, rating) VALUES (:profile_id, :movie_id, :rating)";
+        $stmt = $cnx->prepare($sql);
+        $stmt->bindParam(':profile_id', $profile_id, PDO::PARAM_INT);
+        $stmt->bindParam(':movie_id', $movie_id, PDO::PARAM_INT);
+        $stmt->bindParam(':rating', $rating, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        // Ajouter plus de détails dans le message d'erreur
+        if ($stmt->rowCount() > 0) {
+            return true;
+        } else {
+            error_log("Aucune ligne n'a été insérée");
+            return false;
+        }
+    } catch (PDOException $e) {
+        error_log("Erreur lors de l'ajout de la note: " . $e->getMessage());
+        return false;
+    }
+}
+
+function getAverageRating($movie_id) {
+    $cnx = new PDO("mysql:host=" . HOST . ";dbname=" . DBNAME, DBLOGIN, DBPWD);
+    $sql = "SELECT AVG(rating) AS average_rating FROM Ratings WHERE movie_id = :movie_id";
+    $stmt = $cnx->prepare($sql);
+    $stmt->bindParam(':movie_id', $movie_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $averageRate = $stmt->fetch(PDO::FETCH_OBJ)->average_rating ?? 0;
+    return round($averageRate, 1);
+}
+
+function Rated($profile_id, $movie_id) {
+    $cnx = new PDO("mysql:host=" . HOST . ";dbname=" . DBNAME, DBLOGIN, DBPWD);
+    $sql = "SELECT COUNT(*) FROM Ratings WHERE profile_id = :profile_id AND movie_id = :movie_id";
+    $stmt = $cnx->prepare($sql);
+    $stmt->bindParam(':profile_id', $profile_id, PDO::PARAM_INT);
+    $stmt->bindParam(':movie_id', $movie_id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchColumn() > 0;
 }

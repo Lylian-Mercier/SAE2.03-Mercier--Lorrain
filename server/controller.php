@@ -151,4 +151,21 @@ function updateHighlightStatusController() {
   $result = updateHighlightStatus($movie_id, $is_highlight);
   return $result ? "Le statut de mise en avant a été mis à jour." : "Erreur lors de la mise à jour du statut.";
 }
+
+function addRatingController() {
+  $profile_id = $_REQUEST['profile_id'];
+  $movie_id = $_REQUEST['movie_id'];
+  $rating = $_REQUEST['rating'];
+
+  if (Rated($profile_id, $movie_id)) {
+      return "Vous avez déjà noté ce film.";
+  }
+  $ok = addRating($profile_id, $movie_id, $rating);
+  return $ok ? "La note a été ajoutée." : "Erreur lors de l'ajout de la note.";
+}
+
+function getAverageRatingController() {
+  $movie_id = $_REQUEST['movie_id'];
+  return getAverageRating($movie_id);
+}
       

@@ -21,6 +21,10 @@ DataMovie.requestMovieDetails = async function (movieId) {
     HOST_URL + `/server/script.php?todo=readMovieDetail&id=${movieId}`
   );
   let movieDetails = await answer.json();
+
+  let averageRating = await fetch(HOST_URL + `/server/script.php?todo=getRating&movie_id=${movieId}`);
+  movieDetails.average_rating = await averageRating.json();
+
   return movieDetails;
 };
 
@@ -41,13 +45,13 @@ DataMovie.getFavorites = async function (profileId) {
 };
 
 DataMovie.addFavorite = async function (profileId, movieId) {
-   const url = `${HOST_URL}/server/script.php?todo=addFavorite&profile_id=${profileId}&movie_id=${movieId}`;
-   console.log("URL générée pour l'ajout de favori :", url);
- 
-   // Effectuer la requête fetch pour obtenir la réponse
-   let answer = await fetch(url); // Correction : ajout de fetch pour récupérer la réponse
-   let response = await answer.json(); // Convertir la réponse en JSON
-   return response; // Retourner la réponse
+  const url = `${HOST_URL}/server/script.php?todo=addFavorite&profile_id=${profileId}&movie_id=${movieId}`;
+  console.log("URL générée pour l'ajout de favori :", url);
+
+  // Effectuer la requête fetch pour obtenir la réponse
+  let answer = await fetch(url); // Correction : ajout de fetch pour récupérer la réponse
+  let response = await answer.json(); // Convertir la réponse en JSON
+  return response; // Retourner la réponse
 };
 
 DataMovie.removeFavorites = async function (profileId, movieId) {
@@ -56,21 +60,37 @@ DataMovie.removeFavorites = async function (profileId, movieId) {
   let answer = await fetch(url);
   let response = await answer.json();
   return response;
-}
+};
 
 DataMovie.requestHighlightMovies = async function () {
-  let answer = await fetch(HOST_URL + "/server/script.php?todo=getHighlightMovies");
-  console.log("URL générée pour les films mis en avant :", HOST_URL + "/server/script.php?todo=getHighlightMovies"); // Corrigez ici
+  let answer = await fetch(
+    HOST_URL + "/server/script.php?todo=getHighlightMovies"
+  );
+  console.log(
+    "URL générée pour les films mis en avant :",
+    HOST_URL + "/server/script.php?todo=getHighlightMovies"
+  ); // Corrigez ici
   let highlightMovies = await answer.json();
   console.log("Données reçues pour les films mis en avant :", highlightMovies); // Vérifiez les données reçues
   return highlightMovies;
-}
+};
 
 DataMovie.searchMovies = async function (searchTerm) {
-  const url = `${HOST_URL}/server/script.php?todo=searchMovies&searchTerm=${encodeURIComponent(searchTerm)}`;
+  const url = `${HOST_URL}/server/script.php?todo=searchMovies&searchTerm=${encodeURIComponent(
+    searchTerm
+  )}`;
   let answer = await fetch(url);
   let movies = await answer.json();
   return movies;
+};
+
+DataMovie.addRating = async function ( profileId, movieId, rating) {
+  const url = `${HOST_URL}/server/script.php?todo=addRating&profile_id=${profileId}&movie_id=${movieId}&rating=${rating}`;
+  let response = await fetch(url);
+  let message = await response.json();
+  return message;
 }
+
+
 // On exporte la fonction DataMovie.requestMovies
 export { DataMovie };

@@ -165,6 +165,22 @@
         } 
       }
 
+      C.addRatings = async function (movieId) {
+        const profileID = C.getSelectedProfileId();
+        if (!profileID) {
+          alert("Veuillez sélectionner un profil avant de noter un film.");
+          return;
+        }
+        const rating = document.querySelector("#rating").value;
+        let message = await DataMovie.addRating(
+          profileID,
+          movieId,
+          rating
+        );
+        alert(message);
+        C.handlerDetail(movieId); 
+      }
+
       // Vue (contient tout ce qui est relatif à l'affichage)
       window.V = {};
 

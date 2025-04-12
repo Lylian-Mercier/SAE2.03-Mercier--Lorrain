@@ -13,6 +13,10 @@ MovieDetail.format = function (movieData) {
     html = html.replace("{{movieCategory}}", movieData.category);
     html = html.replace("{{movieAgeRestriction}}", movieData.min_age);
     html = html.replace("{{movieTrailerUrl}}", movieData.trailer);
+    html = html.replace("{{handler}}", `C.addRatings(${movieData.id})`);
+
+    let averageRating = movieData.average_rating || 0;
+    html = html.replace("{{averageRating}}", averageRating);
 
     // Vérifiez si l'élément existe
     const detailSection = document.querySelector("#movie-detail-section");
