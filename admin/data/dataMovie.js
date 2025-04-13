@@ -1,9 +1,9 @@
-let HOST_URL = "https://mmi.unilim.fr/~mercierlorrai1/SAE2.03-Mercier--Lorrain";
+let HOST_URL = "../server";
 
 let DataMovie = {};
 
 DataMovie.request = async function () {
-  let answer = await fetch(HOST_URL + "/server/script.php?todo=getmovie");
+  let answer = await fetch(HOST_URL + "/script.php?todo=getmovie");
   let data = await answer.json();
   return data;
 };
@@ -28,20 +28,20 @@ DataMovie.addMovie = async function (fdata) {
     method: "POST",
     body: fdata,
   };
-  let answer = await fetch(HOST_URL + "/server/script.php?todo=addMovie", config);
+  let answer = await fetch(HOST_URL + "/script.php?todo=addMovie", config);
   let data = await answer.json();
   return data;
 };
 
 DataMovie.searchMovies = async function (searchTerm) {
-  const url = `${HOST_URL}/server/script.php?todo=searchMovies&searchTerm=${encodeURIComponent(searchTerm)}`;
+  const url = `${HOST_URL}/script.php?todo=searchMovies&searchTerm=${encodeURIComponent(searchTerm)}`;
   let answer = await fetch(url);
   let movies = await answer.json();
   return movies;
 }
 
 DataMovie.updateHighlightStatus = async function (movieId, isHighlight) {
-  const url = `${HOST_URL}/server/script.php?todo=updateHighlightStatus&movie_id=${movieId}&is_highlight=${isHighlight}`;
+  const url = `${HOST_URL}/script.php?todo=updateHighlightStatus&movie_id=${movieId}&is_highlight=${isHighlight}`;
   let answer = await fetch(url);
   let response = await answer.json();
   return response;

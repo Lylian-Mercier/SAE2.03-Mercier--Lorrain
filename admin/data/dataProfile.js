@@ -1,4 +1,4 @@
-let HOST_URL = "https://mmi.unilim.fr/~mercierlorrai1/SAE2.03-Mercier--Lorrain";
+let HOST_URL = "../server";
 
 let DataProfile = {};
 
@@ -8,7 +8,7 @@ DataProfile.addProfile = async function (fdata) {
       method: "POST",
       body: fdata,
     };
-    let answer = await fetch(HOST_URL + "/server/script.php?todo=addProfile", config);
+    let answer = await fetch(HOST_URL + "/script.php?todo=addProfile", config);
     let data = await answer.json();
     return data;
   };
@@ -44,7 +44,7 @@ DataProfile.addProfile = async function (fdata) {
  */
 
 DataProfile.getProfiles = async function () {
-  let answer = await fetch(HOST_URL + "/server/script.php?todo=readProfiles");
+  let answer = await fetch(HOST_URL + "/script.php?todo=readProfiles");
   let data = await answer.json();
   return data;
 };

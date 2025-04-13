@@ -1,5 +1,5 @@
 // URL où se trouve le répertoire "server" sur mmi.unilim.fr
-let HOST_URL = "https://mmi.unilim.fr/~mercierlorrai1/SAE2.03-Mercier--Lorrain";
+let HOST_URL = "../server";
 
 let DataMovie = {};
 
@@ -11,25 +11,25 @@ let DataMovie = {};
 // };
 
 DataMovie.requestMovies = async function () {
-  let answer = await fetch(HOST_URL + "/server/script.php?todo=getAllMovies");
+  let answer = await fetch(HOST_URL + "/script.php?todo=getAllMovies");
   let movies = await answer.json();
   return movies;
 };
 
 DataMovie.requestMovieDetails = async function (movieId) {
   let answer = await fetch(
-    HOST_URL + `/server/script.php?todo=readMovieDetail&id=${movieId}`
+    HOST_URL + `/script.php?todo=readMovieDetail&id=${movieId}`
   );
   let movieDetails = await answer.json();
 
-  let averageRating = await fetch(HOST_URL + `/server/script.php?todo=getRating&movie_id=${movieId}`);
+  let averageRating = await fetch(HOST_URL + `/script.php?todo=getRating&movie_id=${movieId}`);
   movieDetails.average_rating = await averageRating.json();
 
   return movieDetails;
 };
 
 DataMovie.requestMoviesCategory = async function (age) {
-  const url = HOST_URL + "/server/script.php?todo=readMovies&age=" + age;
+  const url = HOST_URL + "/script.php?todo=readMovies&age=" + age;
   console.log("URL générée :", url); // Log pour vérifier l'URL
   let answer = await fetch(url);
   let categories = await answer.json();
@@ -38,14 +38,14 @@ DataMovie.requestMoviesCategory = async function (age) {
 
 DataMovie.getFavorites = async function (profileId) {
   let answer = await fetch(
-    `${HOST_URL}/server/script.php?todo=getFavorites&profile_id=${profileId}`
+    `${HOST_URL}/script.php?todo=getFavorites&profile_id=${profileId}`
   );
   let favorites = await answer.json();
   return favorites;
 };
 
 DataMovie.addFavorite = async function (profileId, movieId) {
-  const url = `${HOST_URL}/server/script.php?todo=addFavorite&profile_id=${profileId}&movie_id=${movieId}`;
+  const url = `${HOST_URL}/script.php?todo=addFavorite&profile_id=${profileId}&movie_id=${movieId}`;
   console.log("URL générée pour l'ajout de favori :", url);
 
   // Effectuer la requête fetch pour obtenir la réponse
@@ -55,7 +55,7 @@ DataMovie.addFavorite = async function (profileId, movieId) {
 };
 
 DataMovie.removeFavorites = async function (profileId, movieId) {
-  const url = `${HOST_URL}/server/script.php?todo=removeFavorites&profile_id=${profileId}&movie_id=${movieId}`;
+  const url = `${HOST_URL}/script.php?todo=removeFavorites&profile_id=${profileId}&movie_id=${movieId}`;
   console.log("URL générée pour la suppression de favori :", url);
   let answer = await fetch(url);
   let response = await answer.json();
@@ -64,11 +64,11 @@ DataMovie.removeFavorites = async function (profileId, movieId) {
 
 DataMovie.requestHighlightMovies = async function () {
   let answer = await fetch(
-    HOST_URL + "/server/script.php?todo=getHighlightMovies"
+    HOST_URL + "/script.php?todo=getHighlightMovies"
   );
   console.log(
     "URL générée pour les films mis en avant :",
-    HOST_URL + "/server/script.php?todo=getHighlightMovies"
+    HOST_URL + "/script.php?todo=getHighlightMovies"
   ); // Corrigez ici
   let highlightMovies = await answer.json();
   console.log("Données reçues pour les films mis en avant :", highlightMovies); // Vérifiez les données reçues
@@ -76,7 +76,7 @@ DataMovie.requestHighlightMovies = async function () {
 };
 
 DataMovie.searchMovies = async function (searchTerm) {
-  const url = `${HOST_URL}/server/script.php?todo=searchMovies&searchTerm=${encodeURIComponent(
+  const url = `${HOST_URL}/script.php?todo=searchMovies&searchTerm=${encodeURIComponent(
     searchTerm
   )}`;
   let answer = await fetch(url);

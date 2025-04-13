@@ -1,9 +1,9 @@
-let HOST_URL = "https://mmi.unilim.fr/~mercierlorrai1/SAE2.03-Mercier--Lorrain";
+let HOST_URL = "../server";
 
 let DataProfile = {};
 
 DataProfile.read = async function () {
-  let answer = await fetch(HOST_URL + "/server/script.php?todo=readProfiles");
+  let answer = await fetch(HOST_URL + "/script.php?todo=readProfiles");
   let profile = await answer.json();
   return profile;
 };
