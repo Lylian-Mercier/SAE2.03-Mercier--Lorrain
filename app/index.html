@@ -54,6 +54,18 @@
       C.handlerDetail = async function (movieId) {
         let movieData = await DataMovie.requestMovieDetails(movieId); // Récupère les détails du film
         V.renderMovieDetail(movieData); // Affiche les détails du film
+        MovieDetail.loadComments(movieId); // Charge les commentaires du film
+      
+        document.addEventListener("click", (event) => {
+          if (event.target && event.target.id === "submit-comment") {
+            const movieId = event.target.dataset.movieId; // Récupère l'ID du film
+            if (!movieId) {
+              alert("Aucun ID de film trouvé.");
+              return;
+            }
+            MovieDetail.addComment(movieId); // Ajoute le commentaire
+          }
+        });
       };
 
       C.getAllMovies = async function () {

@@ -1,3 +1,5 @@
+import { Comment } from "../Commentaires/script.js";
+
 let templateFile = await fetch("./component/movieDetail/template.html");
 let template = await templateFile.text();
 
@@ -18,6 +20,8 @@ MovieDetail.format = function (movieData) {
     let averageRating = movieData.average_rating || 0;
     html = html.replace("{{averageRating}}", averageRating);
 
+    html += Comment.format(movieData.id); // Ajout du format de commentaire
+
     // Vérifiez si l'élément existe
     const detailSection = document.querySelector("#movie-detail-section");
     if (detailSection) {
@@ -32,5 +36,12 @@ MovieDetail.format = function (movieData) {
 
     return html;
 };
+
+MovieDetail.loadComments = function (movieId) {
+    Comment.loadComments(movieId);
+}
+MovieDetail.addComment = function (movieId) {
+    Comment.addComment(movieId);
+}
 
 export { MovieDetail };
