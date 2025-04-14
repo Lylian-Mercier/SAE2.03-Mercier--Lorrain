@@ -11,6 +11,7 @@
     <section id="addMovie"></section>
     <section id="addProfile"></section>
     <section id="movieSearch"></section>
+    <section id="moderateCom"></section>
 
     <script type="module">
       import { Log } from "./component/Log/script.js";
@@ -19,6 +20,7 @@
       import { ProfileForm } from "./component/ProfileForm/script.js";
       import { DataProfile } from "./data/dataProfile.js";
       import { MovieSearch } from "./component/movieSearch/script.js";
+      import { Comment } from "./component/ModerationCom/script.js";
 
       window.C = {};
 
@@ -65,6 +67,7 @@
         V.renderAddMovie("C.handlerAddMovie()");
         V.renderAddProfile("C.handlerAddProfile()");
         V.renderMovieSearch();
+        V.renderModerateComments();
       };
 
       window.V = {};
@@ -104,6 +107,12 @@
         <button onclick="C.handlerSearchMovie()">Rechercher</button>
         <div class="movieSearch__results"></div>`;
         MovieSearch.init();
+      };
+
+      V.renderModerateComments = function () {
+         let content = document.querySelector("#moderateCom");
+         content.innerHTML = Comment.format();
+         Comment.loadPendingComments(); // Charge les commentaires en attente
       };
 
       C.start();

@@ -117,6 +117,18 @@ if ( isset($_REQUEST['todo']) ){
         $data = getCommentsController();
         break;
 
+    case 'getPendingComments':
+        $data = getPendingCommentsController();
+        break;
+
+    case 'approveComment':
+        $data = approveCommentController();
+        break;
+
+    case 'deleteComment':
+        $data = deleteCommentController();
+        break;
+
     default: // il y a un paramètre todo mais sa valeur n'est pas reconnue/supportée
       echo json_encode('[error] Unknown todo value');
       http_response_code(400); // 400 == "Bad request"

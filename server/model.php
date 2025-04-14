@@ -350,10 +350,33 @@ function addComment($profile_id, $movie_id, $comment) {
 
 function getComments($movie_id) {
     $cnx = new PDO("mysql:host=" . HOST . ";dbname=" . DBNAME, DBLOGIN, DBPWD);
-    $sql = "SELECT Comments.comment, Comments.creation, Profil.name AS profile_name FROM Comments JOIN Profil ON Comments.profile_id = Profil.id WHERE Comments.movie_id = :movie_id ORDER BY Comments.creation DESC";
+    $sql = "SELECT Comments.comment, Comments.creation, Profil.name AS profile_name FROM Comments JOIN Profil ON Comments.profile_id = Profil.id WHERE Comments.movie_id = :movie_id AND Comments.status = 'approved' ORDER BY Comments.creation DESC";
     $stmt = $cnx->prepare($sql);
     $stmt->bindParam(':movie_id', $movie_id, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_OBJ);
+}
+
+function getPendingComments() {
+    $cnx = new PDO("mysql:host=" . HOST . ";dbname=" . DBNAME, DBLOGIN, DBPWD);
+    $sql = "SELECT Comments.id, Comments.comment, Comments.creation, Profil.name AS profile_name FROM Comments JOIN Profil ON Comments.profile_id = Profil.id WHERE Comments.status = 'pending' ORDER BY Comments.creation DESC";
+    $stmt = $cnx->query($sql);
+    return $stmt->fetchAll(PDO::FETCH_OBJ);
+}
+
+function approveComment($comment_id) {
+    $cnx = new PDO("mysql:host=" . HOST . ";dbname=" . DBNAME, DBLOGIN, DBPWD);
+    $sql = "UPDATE Comments SET status = 'approved' WHERE id = :comment_id";
+    $stmt = $cnx->prepare($sql);
+    $stmt->bindParam(':comment_id', $comment_id, PDO::PARAM_INT);
+    return $stmt->execute();
+}
+
+function deleteComment($comment_id) {
+    $cnx = new PDO("mysql:host=" . HOST . ";dbname=" . DBNAME, DBLOGIN, DBPWD);
+    $sql = "UPDATE Comments SET status = 'deleted' WHERE id = :comment_id";
+    $stmt = $cnx->prepare($sql);
+    $stmt->bindParam(':comment_id', $comment_id, PDO::PARAM_INT);
+    return $stmt->execute();
 }
 

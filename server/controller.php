@@ -187,3 +187,26 @@ function getCommentsController() {
   $movie_id = intval($_REQUEST['movie_id']);
   return getComments($movie_id);
 }
+
+function getPendingCommentsController() {
+  $comments = getPendingComments();
+  return $comments ? $comments : [];
+}
+
+function approveCommentController() {
+  if (!isset($_REQUEST['comment_id'])) {
+      return false; 
+  }
+  $comment_id = intval($_REQUEST['comment_id']);
+  $ok = approveComment($comment_id);
+  return $ok ? "Le commentaire a été approuvé." : "Erreur lors de l'approbation du commentaire.";
+}
+
+function deleteCommentController() {
+  if (!isset($_REQUEST['comment_id'])) {
+      return false; 
+  }
+  $comment_id = intval($_REQUEST['comment_id']);
+  $ok = deleteComment($comment_id);
+  return $ok ? "Le commentaire a été rejeté." : "Erreur lors du rejet du commentaire.";
+}
