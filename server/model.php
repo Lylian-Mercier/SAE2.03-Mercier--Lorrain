@@ -70,7 +70,8 @@ function getMovieDetail($id) {
                     Movie.image, 
                     Movie.trailer, 
                     Movie.min_age, 
-                    Movie.id_category, 
+                    Movie.id_category,
+                    Movie.creation,
                     Category.name AS category
                 FROM Movie
                 JOIN Category ON Movie.id_category = Category.id
@@ -380,3 +381,9 @@ function deleteComment($comment_id) {
     return $stmt->execute();
 }
 
+function getRecentMovies() {
+    $cnx = new PDO("mysql:host=" . HOST . ";dbname=" . DBNAME, DBLOGIN, DBPWD);
+    $sql = "SELECT id, name, image, creation FROM Movie WHERE creation >= DATE_SUB(NOW(), INTERVAL 7 DAY)";
+    $stmt = $cnx->query($sql);
+    return $stmt->fetchAll(PDO::FETCH_OBJ); 
+}

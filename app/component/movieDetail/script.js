@@ -7,6 +7,12 @@ let MovieDetail = {};
 
 MovieDetail.format = function (movieData) {
     let html = template;
+    
+    // Vérifier si le film est récent
+    const recent = movieData.creation && new Date(movieData.creation) >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const newTag = recent ? '<span class="tag">New</span>' : '';
+    
+    // Remplacer tous les placeholders
     html = html.replace("{{movieTitle}}", movieData.name);
     html = html.replace("{{image}}", movieData.image);
     html = html.replace("{{movieSynopsis}}", movieData.description);
@@ -16,6 +22,7 @@ MovieDetail.format = function (movieData) {
     html = html.replace("{{movieAgeRestriction}}", movieData.min_age);
     html = html.replace("{{movieTrailerUrl}}", movieData.trailer);
     html = html.replace("{{handler}}", `C.addRatings(${movieData.id})`);
+    html = html.replace("{{new}}", newTag);
 
     let averageRating = movieData.average_rating || 0;
     html = html.replace("{{averageRating}}", averageRating);

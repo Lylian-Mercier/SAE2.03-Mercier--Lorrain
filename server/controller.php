@@ -210,3 +210,11 @@ function deleteCommentController() {
   $ok = deleteComment($comment_id);
   return $ok ? "Le commentaire a été rejeté." : "Erreur lors du rejet du commentaire.";
 }
+
+function getRecentMoviesController() {
+  $movies = getRecentMovies();
+  if (!$movies) {
+    return []; // Retourne un tableau vide si pas de films récents
+  }
+  return $movies;
+}

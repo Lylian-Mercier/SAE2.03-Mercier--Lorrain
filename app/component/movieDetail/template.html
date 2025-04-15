@@ -1,32 +1,58 @@
 <div id="movie-detail-section" class="movie-detail">
-    <h1 class="movie-title">{{movieTitle}}</h1>
-    <img class="movie-poster" src="https://mmi.unilim.fr/~mercierlorrai1/SAE2.03-Mercier--Lorrain/server/images/{{image}}" alt="Affiche du film" />
-    <p class="movie-synopsis">{{movieSynopsis}}</p>
-    <p><strong>Réalisateur :</strong> <span class="movie-director">{{movieDirector}}</span></p>
-    <p><strong>Année de sortie :</strong> <span class="movie-year">{{movieYear}}</span></p>
-    <p><strong>Catégorie :</strong> <span class="movie-category">{{movieCategory}}</span></p>
-    <p><strong>Restrictions d'âge :</strong> <span class="movie-age-restriction">{{movieAgeRestriction}}</span></p>
-    <div class="movie-trailer-container">
-      <h3>Trailer</h3>
-      <iframe class="movie-trailer" src="{{movieTrailerUrl}}" width="560" height="315" frameborder="0" allowfullscreen></iframe>
+  <h1 class="movie-title">{{movieTitle}}</h1>
+  <img
+    class="movie-poster"
+    src="../server/images/{{image}}"
+    alt="Affiche du film"
+  />
+  <p class="movie-synopsis">{{movieSynopsis}}</p>
+  <p>
+    <strong>Réalisateur :</strong>
+    <span class="movie-director">{{movieDirector}}</span>
+  </p>
+  <p>
+    <strong>Année de sortie :</strong>
+    <span class="movie-year">{{movieYear}}</span>
+  </p>
+  <p>
+    <strong>Catégorie :</strong>
+    <span class="movie-category">{{movieCategory}}</span>
+  </p>
+  <p>
+    <strong>Restrictions d'âge :</strong>
+    <span class="movie-age-restriction">{{movieAgeRestriction}}</span>
+  </p>
+  <div class="movie-trailer-container">
+    <h3>Trailer</h3>
+    <iframe
+      class="movie-trailer"
+      src="{{movieTrailerUrl}}"
+      width="560"
+      height="315"
+      frameborder="0"
+      allowfullscreen
+    ></iframe>
+  </div>
+  <div class="Ratings">
+    <h3>
+      Note moyenne : <span id="average-rating">{{averageRating}}</span>/10
+    </h3>
+    <div id="rating-interface">
+      >
+      <label for="rating">Note :</label>
+      <select id="rating">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+      </select>
+      <button onclick="{{handler}}">Noter</button>
     </div>
-    <div class="Ratings">
-      <h3>Note moyenne : <span id="average-rating">{{averageRating}}</span>/10</h3>
-      <div id="rating-interface">>
-        <label for="rating">Note :</label>
-        <select id="rating">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-        </select>
-        <button onclick="{{handler}}">Noter</button>
-      </div>
-    </div>
+  </div>
 </div>
