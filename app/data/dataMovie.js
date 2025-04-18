@@ -85,26 +85,10 @@ DataMovie.searchMovies = async function (searchTerm) {
 };
 
 DataMovie.addRating = async function ( profileId, movieId, rating) {
-  const url = `${HOST_URL}/script.php?todo=addRating&profile_id=${profileId}&movie_id=${movieId}&rating=${rating}`;
+  const url = `${HOST_URL}/server/script.php?todo=addRating&profile_id=${profileId}&movie_id=${movieId}&rating=${rating}`;
   let response = await fetch(url);
   let message = await response.json();
   return message;
-}
-
-DataMovie.addComment = async function (movieId, profileId, comment) {
-  const url = `${HOST_URL}/script.php?todo=addComment&movie_id=${movieId}&profile_id=${profileId}&comment=${encodeURIComponent(comment)}`;
-  let response = await fetch(url);
-  if (!response.ok) {
-    console.error("Error fetching comments:", response.status, response.statusText);
-    return { error: "Failed to fetch comments" };
-  }
-  return await response.json();
-}
-
-DataMovie.getComments = async function (movieId) {
-  const url = `${HOST_URL}/script.php?todo=getComments&movie_id=${movieId}`;
-  let response = await fetch(url);
-  return await response.json();
 }
 
 

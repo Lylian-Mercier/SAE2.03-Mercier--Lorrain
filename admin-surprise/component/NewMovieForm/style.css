@@ -1,0 +1,100 @@
+.addMovie {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-color);
+  color: var(--white);
+  border-radius: 0.63rem;
+  padding: 1.25rem;
+  max-width: 100%;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+  margin: 1.25rem auto;
+}
+
+.addMovie__title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  color: var(--title-color);
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.63rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.addMovie__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.94rem;
+}
+
+.addMovie__form input,
+.addMovie__form select {
+  padding: 0.75rem 0.94rem;
+  border: none;
+  border-radius: 0.31rem;
+  font-size: 1rem;
+  background-color: var(--arrow-color);
+  color: var(--white);
+  box-shadow: 0 0.13rem 0.25rem rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.addMovie__form input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+}
+
+.addMovie__form select {
+  appearance: none;
+  padding-right: 1.88rem;
+  cursor: pointer;
+}
+
+.addMovie__form input:focus,
+.addMovie__form select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--hover-color);
+  background-color: var(--background-color);
+}
+
+.addMovie__form input[name="description"] {
+  min-height: 3.75rem;
+  padding-top: 0.94rem;
+}
+
+.addMovie__form input[type="button"] {
+  background-color: var(--hover-color);
+  color: var(--white);
+  border: none;
+  border-radius: 0.31rem;
+  padding: 0.75rem 1.25rem;
+  margin-top: 0.63rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0.13rem 0.25rem rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.addMovie__form input[type="button"]:hover {
+  background-color: var(--arrow-color);
+  transform: translateY(-0.13rem);
+}
+
+.addMovie__form input[type="button"]:active {
+  transform: scale(0.98);
+  box-shadow: 0 1px 0.13rem rgba(0, 0, 0, 0.1);
+}
+
+.addMovie__form input:valid {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 0 0 rgba(139, 189, 238, 0.4); }
+  100% { box-shadow: 0 0 0 0.63rem rgba(139, 189, 238, 0); }
+}
+
+.addMovie__form input:focus,
+.addMovie__form select:focus {
+  animation: glow 1.5s infinite alternate;
+  outline: none;
+}

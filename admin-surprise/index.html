@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <title>SAE2.03 ADMIN</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/base.css" />
+  </head>
+  <body>
+    <section id="log"></section>
+    <section id="addMovie"></section>
+    <section id="addProfile"></section>
+    <section id="movieSearch"></section>
+    <section id="moderateCom"></section>
+
+    <script type="module">
+      import { Log } from "./component/Log/script.js";
+      import { NewMovieForm } from "./component/NewMovieForm/script.js";
+      import { DataMovie } from "./data/dataMovie.js";
+      import { ProfileForm } from "./component/ProfileForm/script.js";
+      import { DataProfile } from "./data/dataProfile.js";
+      import { MovieSearch } from "./component/movieSearch/script.js";
+      import { Comment } from "./component/ModerationCom/script.js";
+
+      window.C = {};
+
+      C.handlerAddMovie = async function () {
+       
+        let form = document.querySelector(".addMovie__form");
+        
+        let fd = new FormData(form);
+        console.log("fd", fd);
+        let res = await DataMovie.addMovie(fd);
+        
+        V.renderLog(res);
+      };
+
+      C.handlerAddProfile = async function () {
+        let form = document.querySelector(".addProfile__form");
+
+        let fd = new FormData(form); // Declare and initialize the FormData object
+        let res = await DataProfile.addProfile(fd);
+        V.renderLog(res);
+      };
+
+      C.handlerSearchMovie = async function () {
+        let searchTerm = document.querySelector("#searchTerm").value;
+        let content = document.querySelector("#movieSearch .movieSearch__results");
+        if (!content) {
+          console.error(".movieSearch__results introuvable");
+          return;
+        }
+
+        let movies = await DataMovie.searchMovies(searchTerm);
+        content.innerHTML = MovieSearch.formatResults(movies, "C.handlerUpdateHighlightStatus");
+
+      };
+
+      C.handlerUpdateHighlightStatus = async function (movieId, isHighlighted) {
+        let res = await DataMovie.updateHighlightStatus(movieId, isHighlighted);
+        V.renderLog(res);
+        C.handlerSearchMovie();
+      };
+
+      C.start = function () {
+        V.renderLog("Démarrage de l'application");
+        V.renderAddMovie("C.handlerAddMovie()");
+        V.renderAddProfile("C.handlerAddProfile()");
+        V.renderMovieSearch();
+        V.renderModerateComments();
+      };
+
+      window.V = {};
+
+      V.renderLog = function (txt) {
+        let content = document.querySelector("#log");
+        content.innerHTML = Log.format(txt);
+      };
+
+      V.renderAddMovie = function (handler) {
+        let content = document.querySelector("#addMovie");
+        content.innerHTML += NewMovieForm.format(handler);
+      };
+
+      V.renderAddProfile = async function (handler) {
+        let content = document.querySelector("#addProfile");
+        let profiles = await DataProfile.getProfiles();
+        content.innerHTML = ProfileForm.format(profiles, handler);
+
+        // Vérifiez si les éléments requis existent avant d'appeler init()
+        const select = content.querySelector("#profile-select");
+        const idField = content.querySelector("#profile-id");
+        const nameField = content.querySelector("#profile-name");
+        const avatarField = content.querySelector("#profile-avatar");
+        const ageField = content.querySelector("#profile-min-age");
+
+        if (select && idField && nameField && avatarField && ageField) {
+          ProfileForm.init();
+        } else {
+          console.error("ProfileForm.init() skipped: required elements are missing.");
+        }
+      };
+
+      V.renderMovieSearch = function () {
+        let content = document.querySelector("#movieSearch");
+        content.innerHTML = `<input type="text" id="searchTerm" placeholder="Rechercher un film..." />
+        <button onclick="C.handlerSearchMovie()">Rechercher</button>
+        <div class="movieSearch__results"></div>`;
+        MovieSearch.init();
+      };
+
+      V.renderModerateComments = function () {
+         let content = document.querySelector("#moderateCom");
+         content.innerHTML = Comment.format();
+         Comment.loadPendingComments(); // Charge les commentaires en attente
+      };
+
+      C.start();
+    </script>
+  </body>
+</html>

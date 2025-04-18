@@ -1,3 +1,5 @@
+
+
 let templateFile = await fetch('./component/Log/template.html');
 let template = await templateFile.text();
 

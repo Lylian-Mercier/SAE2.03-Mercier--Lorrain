@@ -1,80 +1,53 @@
-.highlight-container {
-    max-width: 75rem;
-    margin: 1.25rem auto;
-    padding: 1.25rem;
-    background-color: #f9f9f9;
-    border-radius: 0.65rem;
-}
-
-.highlight-container h1 {
-    font-family: 'Arial', sans-serif;
-    font-weight: 700;
-    font-size: 1.5rem;
-    text-align: center;
-    color: #333;
-    background-color: #e0e0e0;
-    padding: 0.75rem;
-    border-radius: 0.75rem;
-    margin-bottom: 1.25rem;
-}
-
-.highlight-movie {
+/* Style pour le composant highlightMovies */
+.featured-movie {
+    font-family: 'Arial', sans-serif; /* Définit la même police que dans les autres styles */
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
     background-color: #fff;
-    border-radius: 0.75rem;
-    padding: 1rem;
-    margin-bottom: 1.25rem;
+    border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    transition: transform 0.3s ease;
+    text-align: center;
 }
 
-.highlight-movie:hover {
-    transform: translateY(-0.30rem);
-}
-
-.highlight-movie img {
-    width: 12.5rem;
-    height: auto;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.highlight-movie h2 {
-    color: #2c3e50;
-    font-size: 1.2rem;
-    margin-bottom: 0.65rem;
+.featured-movie h2 {
+    font-family: 'Arial', sans-serif; /* Applique la même police au titre */
+    font-size: 1.5rem; /* Taille augmentée */
+    font-weight: bold;
+    color: #333;
+    background-color: #eee;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    margin-top: 1rem;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 12px;
     cursor: pointer;
-    transition: color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
 }
 
-.highlight-movie h2:hover {
-    color: #3498db;
+.featured-movie h2:hover {
+    transform: scale(1.1); /* Agrandit légèrement le bouton au survol */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1); /* Accentue l'ombre au survol */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Ajoute une transition fluide */
 }
 
-.highlight-movie p {
-    color: #666;
-    font-size: 0.9rem;
-    line-height: 1.4;
+.featured-movie img {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    margin: 0 auto 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsive design */
-@media (max-width: 50rem) {
-    .highlight-movie {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .highlight-movie img {
-        width: 100%;
-        max-width: 18.75rem;
-    }
-}
-
-@media (max-width: 30rem) {
-    .highlight-container {
-        margin: 0.625rem;
-        padding: 0.625rem;
-    }
+.featured-movie p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
+    text-align: center; /* Centrer le synopsis */
+    margin: 20px 0; /* Ajouter un peu d'espace autour du synopsis */
 }

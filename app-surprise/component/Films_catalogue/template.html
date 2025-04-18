@@ -1,0 +1,17 @@
+<div class="card__container">
+  <picture class="card">
+    <source
+      srcset="../server/images/{{image1}}"
+      media="(orientation: portrait)"
+      alt="Affiche film"
+    />
+    <img
+      src="../server/images/{{image1.1}}"
+      alt=""
+    />
+    {{new}}
+    <h2 class="card__title" onclick="{{handler}}">{{titre}}</h2>
+    <div class="fav_button_container">{{favoriteButton}}</div>
+  </picture>
+</div>
+

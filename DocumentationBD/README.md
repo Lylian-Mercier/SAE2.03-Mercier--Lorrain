@@ -1,0 +1,18 @@
+Itération 5 : Ajout de la table 'Profil'. Afin de faciliter l'intégration de profils utilisateur, j'ai mis en place une table intitulée 'Profil' qui comprend les colonnes suivantes : id sous forme d'INT avec auto-incrémentation, name en VARCHAR(255), avatar en VARCHAR(255) et min_age sous format INT(11). En ce qui concerne les valeurs, j'ai choisi de maintenir celles qui sont utilisées dans les tables 'Movie' et 'Category'. Pour ce qui est des noms, j'ai décidé de les conserver en anglais.
+
+Itération 9 : Ajout de la table 'Favorites'. Pour faciliter l'ajout d'un film aux préférés pour l'utilisateur choisi, j'ai mis en place une table 'Favorites' comportant les colonnes ci-après : un id sous forme d'INT avec auto-incrémentation, profile_id qui fait référence à l'id de la table 'Profil', ainsi que movie_id qui fait référence à l'id de la table 'Movie'. En ce qui concerne les noms, j'ai décidé de les maintenir en anglais.
+
+Itération 11 : Ajout de la colonne 'is_highlight'. J'ai intégré une colonne is_highlight dans la table 'Movie' afin de favoriser la promotion de certains films. Cette colonne utilise le type TINYINT(1) pour reproduire un comportement booléen, avec une valeur initiale fixée à 0.
+
+Itération 14 : Ajout de la table 'Ratings'. Afin de mettre en place un système d'évaluation, j'ai conçu une table appelée 'Ratings' qui contient les colonnes suivantes : id sous forme d'INT avec auto-incrémentation, profile_id qui représente une clé étrangère faisant référence à l'id de la table 'Profil', movie_id qui est aussi une clé étrangère pointant vers l'id de la table 'Movie', et rating en TINYINT(4) destiné à enregistrer la note attribuée par l'utilisateur. Pour ce qui est des noms, j'ai décidé de les conserver en anglais.
+
+Itération 15 : Ajout de la table 'Comments'. Pour mettre en place un système de commentaires, j'ai établi une table 'Comments' comprenant les colonnes suivantes : id sous forme d'INT avec incrémentation automatique, profile_id qui est une référence à l'id de la table 'Profil', movie_id qui fait référence à l'id de la table 'Movie', comment en TEXTE pour conserver le commentaire soumis, et creation en DATETIME pour consigner la date et l'heure auxquelles le commentaire a été publié.
+
+Itération 16 : Ajout de la colonne "status". Afin de gérer les commentaires, j'ai ajouté une colonne 'status' dans la table « Comments » avec les valeurs enum('pending', 'approved', 'deleted'), ce qui me donne la possibilité de superviser l'état des commentaires. J'ai établi « pending » comme valeur par défaut pour garantir que les commentaires ne s'affichent pas avant d'avoir été modérés.
+
+Itération 17 : Ajout de la colonne 'creation'. Afin de gérer l'affichage du tag « new », j'ai introduit la colonne « creation » avec un timestamp, pour indiquer si un film a été ajouté récemment, c'est-à-dire dans les 7 jours précédents.
+
+Cardinalités : 
+On peut associer une catégorie à un ou plusieurs films, ce qui indique qu'un film peut être rattaché à aucune ou plusieurs catégories. Les utilisateurs ont la possibilité d'ajouter un ou plusieurs films à leurs favoris, mais un profil peut ne jamais sélectionner de film comme favori ou n'en choisir qu'un. 
+Concernant l'évaluation, un film peut recevoir des notes de plusieurs profils, tandis qu'un profil individuel peut ne jamais attribuer de note à un film ou en attribuer une seule à la fois. 
+Tout comme un film peut avoir un ou plusieurs commentaires, un profil a la possibilité de ne jamais commenter ou d'en publier uniquement un.

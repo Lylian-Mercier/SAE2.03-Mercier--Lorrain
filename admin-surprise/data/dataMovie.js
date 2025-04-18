@@ -1,0 +1,50 @@
+let HOST_URL = "../server";
+
+let DataMovie = {};
+
+DataMovie.request = async function () {
+  let answer = await fetch(HOST_URL + "/script.php?todo=getmovie");
+  let data = await answer.json();
+  return data;
+};
+
+/** DataMovie.update
+ *
+ * Prend en paramètre un objet FormData (données de formulaire) à envoyer au serveur.
+ * Ces données sont incluses dans une requête HTTP en méthode POST.
+ * Une requête POST au lieu de GET n'affiche pas les données dans l'URL (plus discret).
+ * Les données sont placées dans le corps (body) de la requête HTTP. Elles restent visibles mais
+ * en utilisant les outils de développement du navigateur (Network > Payload).
+ * La requête comprend aussi un paramètre todo valant update pour indiquer au serveur qu'il
+ * s'agit d'une mise à jour (car on a codé le serveur pour qu'il sache quoi faire en fonction de la valeur de todo).
+ *
+ * @param {*} fdata un objet FormData contenant les données du formulaire à envoyer au serveur.
+ * @returns la réponse du serveur.
+ */
+
+
+DataMovie.addMovie = async function (fdata) {
+  let config = {
+    method: "POST",
+    body: fdata,
+  };
+  let answer = await fetch(HOST_URL + "/script.php?todo=addMovie", config);
+  let data = await answer.json();
+  return data;
+};
+
+DataMovie.searchMovies = async function (searchTerm) {
+  const url = `${HOST_URL}/script.php?todo=searchMovies&searchTerm=${encodeURIComponent(searchTerm)}`;
+  let answer = await fetch(url);
+  let movies = await answer.json();
+  return movies;
+}
+
+DataMovie.updateHighlightStatus = async function (movieId, isHighlight) {
+  const url = `${HOST_URL}/script.php?todo=updateHighlightStatus&movie_id=${movieId}&is_highlight=${isHighlight}`;
+  let answer = await fetch(url);
+  let response = await answer.json();
+  return response;
+}
+
+export { DataMovie };

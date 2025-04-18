@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <title>SAE2.03 APP</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/base.css" />
+  </head>
+
+  <body>
+    <header id="header"></header>
+    <section id="highlight-movies"></section>
+    <section id="content"></section>
+
+    <script type="module">
+      import { NavBar } from "./component/NavBar/script.js";
+      import { Movie } from "./component/Films_catalogue/script.js";
+      import { DataMovie } from "./data/dataMovie.js";
+      import { MovieDetail } from "./component/movieDetail/script.js";
+      import { MovieCategory } from "./component/movieCategory/script.js";
+      import { DataProfile } from "./data/dataProfile.js";
+      import { HighlightMovies } from "./component/highlightMovies/script.js";
+      import { Fav } from "./component/Fav/script.js";
+
+      // Définir l'URL du serveur
+      const HOST_URL = "../server"; // Ajoutez cette ligne
+
+      // Controleur
+      // Rappel, écrire window.C plutôt que let C est nécessaire pour tester depuis la console du navigateur
+      // Une fois l'application terminée, on pourrait remettre let C.
+      window.C = {};
+
+      C.activeProfileId = null;
+
+      C.handlerAbout = function () {
+        alert(
+          "Ceci est une base de projet pour la SAE2.03 édition 2025. Bonne chance !"
+        );
+      };
+
+      C.handlerShowMovies = function () {
+        document.querySelector("#highlight-movies").style.display = "block"; // Vide le contenu
+        C.getAllMovies(); // Ré-affiche la liste des films
+      };
+
+      C.start = async function () {
+        let profiles = await DataProfile.read();
+        await V.renderNavBar(
+          "C.handlerAbout()",
+          "C.handlerShowMovies()",
+          profiles
+        );
+        C.getAllMovies();
+        C.getHighlightMovies();
+      };
+
+      C.handlerDetail = async function (movieId) {
+        let movieData = await DataMovie.requestMovieDetails(movieId);
+        V.renderMovieDetail(movieData);
+        MovieDetail.loadComments(movieId);
+        
+        // Supprimer l'ancien event listener s'il existe
+        document.removeEventListener("click", MovieDetail.handleCommentSubmit);
+        
+        // Créer un nouveau gestionnaire d'événements
+        MovieDetail.handleCommentSubmit = function(event) {
+            if (event.target && event.target.id === "submit-comment") {
+                const movieId = event.target.dataset.movieId;
+                if (!movieId) {
+                    alert("Aucun ID de film trouvé.");
+                    return;
+                }
+                MovieDetail.addComment(movieId);
+            }
+        };
+        
+        // Ajouter le nouveau event listener
+        document.addEventListener("click", MovieDetail.handleCommentSubmit);
+      };
+
+      C.getAllMovies = async function () {
+        const age = C.getSelectedProfileAge(); // Récupère l'âge du profil sélectionné
+        let data = await DataMovie.requestMoviesCategory(age); // Récupère les films depuis l'API
+        let recent = await fetch(`${HOST_URL}/script.php?todo=getRecentMovies`).then(res => res.json());
+        
+        for (let category of data) {
+          for (let movie of category.movies) {
+        const recentMovie = recent.find(r => r.id === movie.id);
+        if (recentMovie) {
+          movie.creation = recentMovie.creation;
+        }
+          }
+        }
+
+        V.renderMovieCategory(data); // Affiche les films
+      };
+
+      C.handlerProfileSelect = function (selectElement) {
+        const selectedProfileId = selectElement.value; // Récupère l'ID du profil sélectionné
+        C.activeProfileId = selectedProfileId; // Met à jour le profil actif
+
+        // Récupère l'élément de l'avatar
+        const avatarElement = document.getElementById("profile-image");
+
+        // Sinon, met à jour l'avatar et l'affiche
+        const selectedOption =
+          selectElement.options[selectElement.selectedIndex];
+        const avatarFileName =
+          selectedOption.dataset.img || "default-avatar.jpg";
+        const avatarUrl = `../server/images/${avatarFileName}`;
+        avatarElement.src = avatarUrl;
+        avatarElement.style.display = "block";
+
+        // Recharge les films en fonction de l'âge du profil sélectionné
+        const age = parseInt(selectedOption.dataset.age, 10) || 0; // Récupère l'âge ou retourne 0
+        console.log("Avatar sélectionné :", avatarFileName);
+        console.log("Âge sélectionné :", age);
+
+        C.getAllMovies(); // Recharge les films
+      };
+
+      C.getSelectedProfileAge = function () {
+        const profileSelect = document.querySelector(".navbar__profile-select"); // Assurez-vous que l'élément existe
+        if (profileSelect) {
+          const profileOptions =
+            profileSelect.options[profileSelect.selectedIndex];
+          return parseInt(profileOptions.dataset.age, 10) || 0; // Récupère l'âge ou retourne 0
+        }
+        return 0;
+      };
+
+      C.getSelectedProfileId = function () {
+        const profileSelect = document.querySelector(".navbar__profile-select");
+        if (profileSelect) {
+          return profileSelect.value || null; // Retourne l'ID ou null si aucun profil n'est sélectionné
+        }
+        return null;
+      };
+
+      C.addFavorite = async function (profileId, movieId) {
+        // Si aucun profilId n'est fourni, récupérez-le depuis la barre de navigation
+        profileId = profileId || C.getSelectedProfileId();
+
+        if (!profileId) {
+          alert("Veuillez sélectionner un profil avant d'ajouter un favori.");
+          return;
+        }
+
+        let response = await DataMovie.addFavorite(profileId, movieId);
+        alert(response); // Affiche un message de confirmation
+        C.getAllMovies(); // Recharge la liste des films
+      };
+
+      C.showFavorites = async function (profileId) {
+        profileId = profileId || C.getSelectedProfileId();
+
+        if (!profileId) {
+          alert("Veuillez sélectionner un profil pour voir les favoris.");
+          return;
+        }
+
+        let favorites = await DataMovie.getFavorites(profileId);
+        V.renderFavorites(favorites);
+      };
+
+      C.removeFavorites = async function (profileId, movieId) {
+        profileId = profileId || C.getSelectedProfileId();
+
+        if (!profileId){
+          alert("Veuillez sélectionner un profil avant de supprimer un favori.");
+          return;
+        }
+
+        let response = await DataMovie.removeFavorites(profileId, movieId);
+        alert(response);
+        C.showFavorites(profileId);
+      }
+
+      C.getHighlightMovies = async function () {
+        console.log("C.getHighlightMovies() est exécuté");
+        let highlightMovies = await DataMovie.requestHighlightMovies();
+        console.log("Films mis en avant reçus :", highlightMovies); // Vérifiez les données reçues
+        V.renderHighlightMovies(highlightMovies);
+      }
+
+      C.searchMovies = async function () {
+        document.querySelector("#highlight-movies").style.display = "none"; // Cache la section des films en avant
+        const searchTerm = document.querySelector("#search-input").value.trim(); // Récupère la valeur de l'input de recherche
+        if (searchTerm === "") {
+          alert("Veuillez entrer un terme de recherche.");
+          return;
+        }
+        let movies = await DataMovie.searchMovies(searchTerm); // Récupère les films correspondant au terme de recherche
+        if (movies.length === 0) {
+          document.querySelector("#content").innerHTML =
+            "<p>Aucun film trouvé.</p>"; // Affiche un message si aucun film n'est trouvé
+        } else {
+          V.renderMovies(movies); // Affiche les films trouvés
+        } 
+      }
+
+      C.addRatings = async function (movieId) {
+        const profileID = C.getSelectedProfileId();
+        if (!profileID) {
+          alert("Veuillez sélectionner un profil avant de noter un film.");
+          return;
+        }
+        const rating = document.querySelector("#rating").value;
+        let message = await DataMovie.addRating(
+          profileID,
+          movieId,
+          rating
+        );
+        alert(message);
+        C.handlerDetail(movieId); 
+      }
+
+      // Vue (contient tout ce qui est relatif à l'affichage)
+      window.V = {};
+
+      /**
+       * V.renderNavBar
+       *
+       * Cette fonction est responsable de l'affichage de la barre de navigation (NavBar).
+       * Elle sélectionne l'élément HTML avec l'ID "header" et y insère le contenu
+       * formaté par le composant NavBar.
+       */
+      V.renderNavBar = async function (hAbout, hShowMovies, profiles) {
+        let header = document.querySelector("#header");
+        header.innerHTML = await NavBar.format(hAbout, hShowMovies, profiles); // Attendez que NavBar.format retourne le HTML
+      };
+
+      V.renderMovies = function (movies) {
+        let content = document.querySelector("#content");
+        content.innerHTML = Movie.format(movies);
+      };
+
+      V.renderMovieDetail = function (movieData) {
+        let content = document.querySelector("#content");
+        content.innerHTML = MovieDetail.format(movieData);
+      };
+
+      V.renderMovieCategory = function (data) {
+        let content = document.querySelector("#content");
+        console.log("Données reçues pour les catégories :", data);
+        if (!data || data.length === 0) {
+          // Si aucune catégorie ou aucun film n'est disponible
+          content.innerHTML = "<p>Aucun film disponible pour ce profil.</p>";
+          return;
+        }
+
+        let html = "";
+        for (let movie of data) {
+          html += MovieCategory.format(movie);
+        }
+        content.innerHTML = html;
+        
+        // Initialiser les carrousels après avoir rendu le contenu
+        MovieCategory.initCarousels();
+      };
+
+      V.renderFavorites = function (favorites) {
+        let content = document.querySelector("#content");
+        content.innerHTML = "";
+
+        if (favorites.length === 0) {
+          content.innerHTML = "<p class='favorite__empty'>Votre liste de favoris est vide.</p>";
+          return;
+        }
+
+        // Utilisez formatList au lieu de formatLi pour chaque favori
+        content.innerHTML = Fav.formatList(favorites);
+      };
+
+      V.renderHighlightMovies = function (highlightMovies) {
+        let content = document.querySelector("#highlight-movies");
+        let html = HighlightMovies.format(highlightMovies);
+        content.innerHTML = html;
+      };
+
+      C.start(); // Démarre l'application
+    </script>
+  </body>
+</html>
+<script type="module"></script>

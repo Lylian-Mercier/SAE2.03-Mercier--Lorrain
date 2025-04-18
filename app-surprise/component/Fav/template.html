@@ -1,0 +1,9 @@
+<div class="favorite__card">
+    <div class="card">
+        <img src="../server/images/{{image}}"/>
+    </div>
+    <h3 class="card__title-fav" onclick="{{handler}}">{{name}}</h3>
+    <div class="fav_button_container">
+        <button class="fav_button" onclick="C.removeFavorites(C.getSelectedProfileId(),'{{id}}')">Retirer des favoris</button>
+    </div>
+</div>
